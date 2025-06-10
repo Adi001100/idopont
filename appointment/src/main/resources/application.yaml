@@ -1,0 +1,22 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3333/appointment?createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+    username: root
+    password: adamadam
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  # Hasznos, ha később validációt használsz
+  mvc:
+    format:
+      date-time: iso
