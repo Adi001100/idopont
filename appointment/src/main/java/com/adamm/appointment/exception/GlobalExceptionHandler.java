@@ -55,11 +55,51 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(body, status);
     }
 
-    @ExceptionHandler(UserExistsException.class)
-    public ResponseEntity<List<ValidationError>> handleEmailAlreadyExists(UserExistsException exception) {
+    @ExceptionHandler(UserEmailExistsException.class)
+    public ResponseEntity<List<ValidationError>> handleEmailAlreadyExists(UserEmailExistsException exception) {
         log.error("E-mail already exists: ", exception);
 
         ValidationError validationError = new ValidationError("email", "E-mail already exists: " + exception.getEmail());
+        return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserNotFoundByEmailException.class)
+    public ResponseEntity<List<ValidationError>> handleEmailNotFound(UserNotFoundByEmailException exception) {
+        log.error("User not found by email: ", exception);
+
+        ValidationError validationError = new ValidationError("email", "User not found by email: " + exception.getEmail());
+        return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserNotActiveException.class)
+    public ResponseEntity<List<ValidationError>> handleUserNotActive(UserNotActiveException exception) {
+        log.error("User not active", exception);
+
+        ValidationError validationError = new ValidationError("email", exception.getMessage());
+        return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserLockedException.class)
+    public ResponseEntity<List<ValidationError>> handleUserNotActive(UserLockedException exception) {
+        log.error("User Locked", exception);
+
+        ValidationError validationError = new ValidationError("password", "User locked" + exception.getMessage());
+        return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<List<ValidationError>> handleInvalidCredentials(InvalidCredentialsException exception) {
+        log.error("Invalid credentials", exception);
+
+        ValidationError validationError = new ValidationError("password", exception.getPassword());
+        return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ProductNotFoundByIdException.class)
+    public ResponseEntity<List<ValidationError>> handleProductNotFoundById(ProductNotFoundByIdException exception) {
+        log.error("Product not found by id", exception);
+
+        ValidationError validationError = new ValidationError("id", exception.getId().toString());
         return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
     }
 }

@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class UserExistsException extends RuntimeException {
+public class InvalidCredentialsException extends RuntimeException {
 
-    private final String email;
+    private final String password;
 
 }

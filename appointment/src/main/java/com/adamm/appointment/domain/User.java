@@ -1,9 +1,13 @@
 package com.adamm.appointment.domain;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +17,7 @@ import com.adamm.appointment.enums.Role;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +28,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @Data
 public class User implements UserDetails {
@@ -44,7 +50,17 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private Boolean isActive;
+    private Boolean active;
+    private Boolean locked;
+    private int failedLoginAttempts;
+    
+    @CreatedDate
+    private Instant createdAt;
+
+    @LastModifiedDate
+    private Instant updatedAt;
+
+    private Instant lastLogin;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -52,13 +68,14 @@ public class User implements UserDetails {
     }
 
     public User(UserCreateDTO userCreateDTO) {
-        this.fullName = userCreateDTO.firstName() + userCreateDTO.lastName();
+        this.fullName = userCreateDTO.firstName() + " " + userCreateDTO.lastName();
         this.email = userCreateDTO.email();
         this.phone = userCreateDTO.phone();
         this.address = userCreateDTO.address();
         this.billingAddress = userCreateDTO.billingAddress();
         this.appointments = new ArrayList<>();
-        this.isActive = false;
+        this.active = false;
+        this.locked = false;
     }
 
     @Override
