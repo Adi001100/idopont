@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.adamm.appointment.config.JwtUtil;
 import com.adamm.appointment.domain.User;
+import com.adamm.appointment.dto.JwtResponseDTO;
 import com.adamm.appointment.dto.UserCreateDTO;
 import com.adamm.appointment.dto.UserInfoDTO;
 import com.adamm.appointment.dto.UserLoginDTO;
@@ -48,7 +49,7 @@ public class AuthService {
         return new UserInfoDTO(userRepository.save(userToSave));
     }
 
-    public String login(UserLoginDTO loginDTO) {
+    public JwtResponseDTO login(UserLoginDTO loginDTO) {
         String email = loginDTO.email();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundByEmailException(email));
@@ -63,7 +64,7 @@ public class AuthService {
 
         user.setLastLogin(Instant.now());
         userRepository.save(user);
-        return jwtUtil.generateToken(user);
+        return new JwtResponseDTO(jwtUtil.generateToken(user));
     }
 
     private void checkUserCanLogin(User user) {

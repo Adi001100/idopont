@@ -1,0 +1,10 @@
+<div class="login-container">
+    <h2>Bejelentkezés</h2>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <input type="email" formControlName="email" placeholder="Email" required />
+      <input type="password" formControlName="password" placeholder="Jelszó" required />
+      <button type="submit" [disabled]="form.invalid">Bejelentkezés</button>
+    </form>
+    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+  </div>
+  

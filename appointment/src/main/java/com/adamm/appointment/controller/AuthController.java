@@ -1,14 +1,13 @@
 package com.adamm.appointment.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.adamm.appointment.dto.JwtResponseDTO;
 import com.adamm.appointment.dto.UserCreateDTO;
 import com.adamm.appointment.dto.UserInfoDTO;
 import com.adamm.appointment.dto.UserLoginDTO;
@@ -37,10 +36,10 @@ public class AuthController {
         return new ResponseEntity<>(userInfoDTO, HttpStatus.CREATED);
     }
 
-    @GetMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserLoginDTO loginDTO) {
+    @PostMapping("/login")
+    public ResponseEntity<JwtResponseDTO> login(@RequestBody UserLoginDTO loginDTO) {
         log.info("POST request at /api/user with body:", loginDTO.toString());
-        String token = authService.login(loginDTO);
+        JwtResponseDTO token = authService.login(loginDTO);
         log.info("Successful login:", loginDTO.email());
         return ResponseEntity.ok(token);
     }
