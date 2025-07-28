@@ -1,0 +1,13 @@
+<h2>Regisztráció</h2>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <input formControlName="fullName" placeholder="Teljes név" /><br />
+  <input formControlName="email" placeholder="Email" /><br />
+  <input type="password" formControlName="password" placeholder="Jelszó" /><br />
+  <input formControlName="phone" placeholder="Telefon" /><br />
+  <input formControlName="address" placeholder="Cím" /><br />
+  <input formControlName="billingAddress" placeholder="Számlázási cím" /><br />
+  <button type="submit">Regisztráció</button>
+</form>
+
+<div *ngIf="errorMessage" style="color:red;">{{ errorMessage }}</div>

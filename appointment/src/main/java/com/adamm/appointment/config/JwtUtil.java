@@ -13,8 +13,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class JwtUtil {
 
     private final String jwtSecret = "hRt7NwvFTFz9BRVR0WrLwN2X0jEZeOqUvTx0yr5fjTqErWH3fNNIct+0yBeH8o4IYiI+MLzFPx5YX1Gv9mT0Pw==";
-    // private final long jwtExpirationMs = 3600000; // 1 óra
-    private final long jwtExpirationMs = 15000; // 15 mp teszthez
+    private final long jwtExpirationMs = 3600000; // 1 óra
+    // private final long jwtExpirationMs = 15000; // 15 mp teszthez
 
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder()

@@ -1,0 +1,26 @@
+<h2>Új szolgáltatás létrehozása</h2>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <label>
+        Név:
+        <input type="text" formControlName="name" />
+    </label>
+    <div *ngIf="form.get('name')?.invalid && form.get('name')?.touched">A név kötelező.</div>
+
+    <label>
+        Időtartam (Perc):
+        <input type="number" formControlName="durationMinutes" />
+    </label>
+    <div *ngIf="form.get('durationMinutes')?.invalid && form.get('durationMinutes')?.touched">Az időtartam kötelező.</div>
+
+    <label>
+        Ár (Ft):
+        <input type="number" formControlName="price" />
+    </label>
+    <div *ngIf="form.get('price')?.invalid && form.get('price')?.touched">Az ár kötelező.</div>
+
+    <button type="submit" [disabled]="form.invalid">Létrehozás</button>
+</form>
+
+<p *ngIf="errorMessage" style="color: red">{{ errorMessage }}</p>
+
+<app-product-list></app-product-list>

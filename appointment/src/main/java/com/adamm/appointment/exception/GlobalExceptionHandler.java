@@ -79,14 +79,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(UserLockedException.class)
-    public ResponseEntity<List<ValidationError>> handleUserNotActive(UserLockedException exception) {
-        log.error("User Locked", exception);
-
-        ValidationError validationError = new ValidationError("password", "User locked" + exception.getMessage());
-        return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
-    }
-
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<List<ValidationError>> handleInvalidCredentials(InvalidCredentialsException exception) {
         log.error("Invalid credentials", exception);
