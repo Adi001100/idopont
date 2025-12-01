@@ -1,18 +1,21 @@
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ProductListComponent } from "../product-list/product-list.component";
+
 @Component({
   selector: 'app-product-create',
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, ProductListComponent],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
   templateUrl: './product-create.component.html',
   styleUrl: './product-create.component.css'
 })
 export class ProductCreateComponent {
   form: FormGroup;
   errorMessage = '';
+
+  @Output() serviceCreated = new EventEmitter<void>();
 
   constructor(
     private fb: FormBuilder,
@@ -27,9 +30,7 @@ export class ProductCreateComponent {
   }
 
   onSubmit() {
-    if (this.form.invalid) {
-      return
-    };
+    if (this.form.invalid) return;
 
     const serviceData = this.form.value;
 
@@ -41,16 +42,13 @@ export class ProductCreateComponent {
       })
       .subscribe({
         next: (res) => {
-          this.router.navigate(['/create'])
-          this.errorMessage = res.name + ' sikeresen létrehiozva.'
-          console.log(res);
+          this.errorMessage = res.name + ' sikeresen létrehozva.';
+          this.serviceCreated.emit();
           this.form.reset();
         },
         error: (err) => {
           this.errorMessage = 'Hiba történt a létrehozás során.';
-          console.error(err);
         }
       });
   }
-
 }

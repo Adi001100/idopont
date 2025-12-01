@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adamm.appointment.dto.JwtResponseDTO;
 import com.adamm.appointment.dto.UserCreateDTO;
 import com.adamm.appointment.dto.UserInfoDTO;
 import com.adamm.appointment.dto.UserLoginDTO;
 import com.adamm.appointment.service.AuthService;
 
 import lombok.extern.slf4j.Slf4j;
+
 
 
 
@@ -37,10 +37,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponseDTO> login(@RequestBody UserLoginDTO loginDTO) {
+    public ResponseEntity<String> login(@RequestBody UserLoginDTO loginDTO) {
         log.info("POST request at /api/user with body:", loginDTO.toString());
-        JwtResponseDTO token = authService.login(loginDTO);
+        String token = authService.login(loginDTO);
         log.info("Successful login:", loginDTO.email());
         return ResponseEntity.ok(token);
+
     }
 }

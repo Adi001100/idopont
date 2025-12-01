@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-navbar',
@@ -12,9 +12,29 @@ import { HttpClientModule } from '@angular/common/http';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
-  constructor(public auth: AuthService) {}
+  errorMessage = '';
+
+  constructor(
+    public auth: AuthService,
+    private http: HttpClient,
+    private router: Router,
+  ) { }
 
   logout() {
-    this.auth.logout();
+    this.http
+      .post<{}>('http://localhost:8080/api/auth/logout', {}, {withCredentials: true})
+      .subscribe({
+        next: (res) => {
+          this.errorMessage = 'Sikeres kijelentkezés'
+          this.router.navigate(['/']);
+        },
+        error: (err) => {
+          if (Array.isArray(err.error) && err.error.length > 0) {
+            this.errorMessage = err.error[0].message;
+          } else {
+            this.errorMessage = 'Ismeretlen hiba történt.';
+          }
+        }
+      });
   }
 }

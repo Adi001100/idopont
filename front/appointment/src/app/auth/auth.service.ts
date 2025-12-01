@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private tokenKey = 'token';
+  
+  private logoutTimer: any;
 
-  getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
-  }
+  constructor(private router: Router) {}
 
-  isLoggedIn(): boolean {
-    return !!this.getToken();
-  }
-
-  logout(): void {
-    localStorage.removeItem(this.tokenKey);
+  logout() {
+    localStorage.clear();
+    if (this.logoutTimer) {
+      clearTimeout(this.logoutTimer);
+    }
+    this.router.navigate(['/login']);
   }
 }

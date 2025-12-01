@@ -29,6 +29,8 @@ export class RegisterComponent {
     });
   }
 
+
+  //TODO hibaüzit normálisan kiírni.
   onSubmit() {
     if (this.form.invalid) return;
 

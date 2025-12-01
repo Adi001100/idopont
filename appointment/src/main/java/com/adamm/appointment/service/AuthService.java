@@ -6,9 +6,7 @@ import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.adamm.appointment.config.JwtUtil;
 import com.adamm.appointment.domain.User;
-import com.adamm.appointment.dto.JwtResponseDTO;
 import com.adamm.appointment.dto.UserCreateDTO;
 import com.adamm.appointment.dto.UserInfoDTO;
 import com.adamm.appointment.dto.UserLoginDTO;
@@ -29,7 +27,6 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtUtil jwtUtil;
 
 
     public UserInfoDTO createUser(UserCreateDTO createDTO) {
@@ -49,7 +46,7 @@ public class AuthService {
         return new UserInfoDTO(userRepository.save(userToSave));
     }
 
-    public JwtResponseDTO login(UserLoginDTO loginDTO) {
+    public String login(UserLoginDTO loginDTO) {
         String email = loginDTO.email();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundByEmailException(email));
@@ -64,7 +61,7 @@ public class AuthService {
 
         user.setLastLogin(Instant.now());
         userRepository.save(user);
-        return new JwtResponseDTO(jwtUtil.generateToken(user));
+        return "siker";
     }
 
     private void checkUserCanLogin(User user) {

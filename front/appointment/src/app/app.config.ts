@@ -7,13 +7,15 @@ import { AuthGuard } from './auth/auth.guard';
 import { MeComponent } from './component/me/me.component';
 import { ProductCreateComponent } from './component/product-create/product-create.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'product', canActivate:[AuthGuard], component: ProductComponent },
-  { path: 'create', canActivate:[AuthGuard], component: ProductCreateComponent },
-  { path: 'me', canActivate:[AuthGuard], component: MeComponent },
+  { path: 'product', canActivate: [AuthGuard], component: ProductComponent },
+  { path: 'create', canActivate: [AuthGuard], component: ProductCreateComponent },
+  { path: 'me', canActivate: [AuthGuard], component: MeComponent },
+  { path: 'product', loadComponent: () => import('./component/product/product.component').then(m => m.ProductComponent) }
+
 ];
 
 export const appConfig = {

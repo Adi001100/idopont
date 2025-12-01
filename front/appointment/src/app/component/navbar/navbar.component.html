@@ -1,9 +1,19 @@
-<nav>
+<!-- <nav>
   <a routerLink="/">Főoldal</a>
   <a *ngIf="!auth.isLoggedIn()" routerLink="/login">Bejelentkezés</a>
   <a *ngIf="!auth.isLoggedIn()" routerLink="/register">Regisztráció</a>
   <a *ngIf="auth.isLoggedIn()" routerLink="/product">Szolgáltatásaim</a>
   <a *ngIf="auth.isLoggedIn()" routerLink="/me">Profil</a>
+  <a routerLink="/product">testszolgaltatas</a>
   <button *ngIf="auth.isLoggedIn()" (click)="logout()">Kijelentkezés</button>
-  <a routerLink="/create">létrehozás</a>
+</nav> -->
+
+<nav>
+  <a routerLink="/">Főoldal</a>
+  <a routerLink="/login">Bejelentkezés</a>
+  <a routerLink="/register">Regisztráció</a>
+  <a routerLink="/product">Szolgáltatásaim</a>
+  <a routerLink="/me">Profil</a>
+  <a routerLink="/product">testszolgaltatas</a>
+  <button (click)="logout()">Kijelentkezés</button>
 </nav>

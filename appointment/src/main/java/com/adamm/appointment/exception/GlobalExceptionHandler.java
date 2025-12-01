@@ -79,6 +79,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(UserLockedException.class)
+    public ResponseEntity<List<ValidationError>> handleUserLocked(UserLockedException exception) {
+        log.error("User locked", exception);
+
+        ValidationError validationError = new ValidationError("message", exception.getMessage());
+        return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<List<ValidationError>> handleInvalidCredentials(InvalidCredentialsException exception) {
         log.error("Invalid credentials", exception);
@@ -87,6 +95,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
     }
 
+
     @ExceptionHandler(ProductNotFoundByIdException.class)
     public ResponseEntity<List<ValidationError>> handleProductNotFoundById(ProductNotFoundByIdException exception) {
         log.error("Product not found by id", exception);
@@ -94,4 +103,5 @@ public class GlobalExceptionHandler {
         ValidationError validationError = new ValidationError("id", exception.getId().toString());
         return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
     }
+
 }

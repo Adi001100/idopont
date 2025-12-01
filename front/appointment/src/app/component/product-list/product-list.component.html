@@ -1,12 +1,12 @@
 <h2>Szolgáltatások</h2>
 
-<div *ngIf="services.length === 0">Nincs még szolgáltatás.</div>
+<div *ngIf="services.length === 0 && !errorMessage">Nincs még szolgáltatás.</div>
 
 <ul *ngIf="services.length > 0">
-    <li *ngFor="let service of services">
-        <strong>{{ service.name }}</strong> – {{ service.price }} Ft
-        <p>{{ service.description }}</p>
-    </li>
+  <li *ngFor="let service of services">
+    <strong>{{ service.name }}</strong> – {{ service.price }} Ft
+    <p>{{ service.description }}</p>
+  </li>
 </ul>
 
 <p *ngIf="errorMessage" style="color: red">{{ errorMessage }}</p>
