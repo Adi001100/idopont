@@ -9,4 +9,6 @@ import { NavbarComponent } from "./component/navbar/navbar.component";
   imports: [RouterModule, NavbarComponent],
   templateUrl: 'app.component.html',
 })
-export class AppComponent {}
+export class AppComponent {
+  title = 'appointment';
+}

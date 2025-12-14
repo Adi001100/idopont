@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Product } from '../../models/product.model';
 
 @Component({
   selector: 'app-product-list',
@@ -9,6 +10,6 @@ import { CommonModule } from '@angular/common';
   styleUrl: './product-list.component.css'
 })
 export class ProductListComponent {
-  @Input() services: any[] = [];
+  @Input() services: Product[] = [];
   @Input() errorMessage = '';
 }
