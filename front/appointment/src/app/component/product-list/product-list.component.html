@@ -5,7 +5,7 @@
 <ul *ngIf="services.length > 0">
   <li *ngFor="let service of services">
     <strong>{{ service.name }}</strong> – {{ service.price }} Ft
-    <p>{{ service.description }}</p>
+    <p>Időtartam: {{ service.durationMinutes }} perc</p>
   </li>
 </ul>
 
