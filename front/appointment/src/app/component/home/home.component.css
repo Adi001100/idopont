@@ -1,0 +1,72 @@
+.hero {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  align-items: center;
+  overflow: hidden;
+}
+
+.hero-text h1 {
+  font-size: clamp(1.9rem, 3vw, 2.6rem);
+  margin-bottom: 0.7rem;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin: 1.1rem 0;
+  flex-wrap: wrap;
+}
+
+.hero-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.8rem;
+}
+
+.hero-visual .card.accent {
+  background: linear-gradient(160deg, rgba(156, 202, 214, 0.35), rgba(247, 205, 212, 0.45));
+  box-shadow: var(--shadow);
+}
+
+.highlight-list li {
+  padding: 0.65rem 0;
+  border-bottom: 1px dashed rgba(38, 50, 68, 0.15);
+  color: #263144;
+  font-weight: 600;
+}
+
+.highlight-list li:last-child {
+  border-bottom: none;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  font-weight: 700;
+  color: #263144;
+  margin-right: 0.5rem;
+}
+
+.pill.mint { background: rgba(156, 202, 214, 0.4); }
+.pill.pink { background: rgba(247, 205, 212, 0.4); }
+.pill.lemon { background: rgba(197, 214, 164, 0.4); }
+
+.hero-visual .btn.full {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.info-grid article {
+  position: relative;
+  isolation: isolate;
+}
+
+.info-grid .pill {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+}

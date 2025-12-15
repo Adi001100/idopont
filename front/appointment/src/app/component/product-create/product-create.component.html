@@ -1,24 +1,29 @@
-<h2>Új szolgáltatás létrehozása</h2>
+<div class="section-title">
+  <h3>Új szolgáltatás</h3>
+  <small>Adj meg egy rövid leírást és árazást.</small>
+</div>
+
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <label>
-    Név:
-    <input type="text" formControlName="name" />
+    Név
+    <input type="text" formControlName="name" placeholder="Pl. Gyors konzultáció" />
+    <div class="helper-text" *ngIf="form.get('name')?.invalid && form.get('name')?.touched">A név kötelező.</div>
   </label>
-  <div *ngIf="form.get('name')?.invalid && form.get('name')?.touched">A név kötelező.</div>
 
-  <label>
-    Időtartam (perc):
-    <input type="number" formControlName="durationMinutes" />
-  </label>
-  <div *ngIf="form.get('durationMinutes')?.invalid && form.get('durationMinutes')?.touched">Az időtartam kötelező.</div>
+  <div class="grid-two">
+    <label>
+      Időtartam (perc)
+      <input type="number" formControlName="durationMinutes" placeholder="30" />
+      <div class="helper-text" *ngIf="form.get('durationMinutes')?.invalid && form.get('durationMinutes')?.touched">Az időtartam kötelező.</div>
+    </label>
+    <label>
+      Ár (Ft)
+      <input type="number" formControlName="price" placeholder="12000" />
+      <div class="helper-text" *ngIf="form.get('price')?.invalid && form.get('price')?.touched">Az ár kötelező.</div>
+    </label>
+  </div>
 
-  <label>
-    Ár (Ft):
-    <input type="number" formControlName="price" />
-  </label>
-  <div *ngIf="form.get('price')?.invalid && form.get('price')?.touched">Az ár kötelező.</div>
-
-  <button type="submit" [disabled]="form.invalid">Létrehozás</button>
+  <button type="submit" class="btn soft" [disabled]="form.invalid">Létrehozás</button>
 </form>
 
-<p *ngIf="errorMessage" style="color: red">{{ errorMessage }}</p>
+<p *ngIf="errorMessage" class="helper-text">{{ errorMessage }}</p>

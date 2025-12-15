@@ -1,5 +1,19 @@
-<h1>Szolgáltatások kezelése</h1>
+<section class="card">
+  <div class="page-title">
+    <div>
+      <div class="tag">Szolgáltatások</div>
+      <h2>Szolgáltatások kezelése</h2>
+      <p class="subtle-text">Tartsd egyensúlyban az árakat és a foglalásokat a lágy pasztell felületen.</p>
+    </div>
+    <div class="pill pink">Új elem</div>
+  </div>
 
-<app-product-create (serviceCreated)="onServiceCreated()"></app-product-create>
-<hr>
-<app-product-list [services]="services" [errorMessage]="errorMessage"></app-product-list>
+  <div class="grid-two">
+    <div class="card">
+      <app-product-create (serviceCreated)="onServiceCreated()"></app-product-create>
+    </div>
+    <div class="card">
+      <app-product-list [services]="services" [errorMessage]="errorMessage"></app-product-list>
+    </div>
+  </div>
+</section>

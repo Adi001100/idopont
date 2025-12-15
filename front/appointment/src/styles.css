@@ -1,1 +1,205 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --bg: #f7f7fb;
+  --surface: #ffffff;
+  --surface-muted: #fdf6ff;
+  --text: #2c2c38;
+  --subtle: #6b6b7a;
+  --primary: #9ccad6;
+  --secondary: #f7cdd4;
+  --accent: #c5d6a4;
+  --shadow: 0 12px 30px rgba(96, 112, 144, 0.12);
+  --radius-lg: 22px;
+  --radius-md: 14px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover,
+ button:hover {
+  cursor: pointer;
+}
+
+h1, h2, h3, h4 {
+  color: #1f1f2c;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.5px;
+}
+
+p {
+  margin: 0 0 1rem;
+  color: var(--subtle);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.75rem 1.2rem;
+  border-radius: 999px;
+  border: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  letter-spacing: 0.1px;
+}
+
+.btn.soft {
+  background: linear-gradient(135deg, var(--primary), #b8d9e0);
+  color: #0f1b2d;
+  box-shadow: var(--shadow);
+}
+
+.btn.ghost {
+  background: #fff;
+  color: #263244;
+  border: 1px solid rgba(38, 50, 68, 0.12);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 1.8rem;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 85% 20%, rgba(247, 205, 212, 0.18), transparent 35%),
+    radial-gradient(circle at 15% 15%, rgba(156, 202, 214, 0.16), transparent 40%);
+  pointer-events: none;
+}
+
+form {
+  display: grid;
+  gap: 1rem;
+}
+
+label {
+  font-weight: 600;
+  color: #1f1f2c;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+input,
+ select,
+ textarea {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(38, 50, 68, 0.12);
+  background: #fff;
+  font-size: 1rem;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus,
+ select:focus,
+ textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(156, 202, 214, 0.25);
+}
+
+.helper-text {
+  color: #e65f77;
+  font-size: 0.9rem;
+  margin-top: -0.25rem;
+}
+
+.page-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.grid-two {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(156, 202, 214, 0.18);
+  color: #0f1b2d;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.section-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 1.5rem 0 0.75rem;
+}
+
+.section-title small {
+  color: var(--subtle);
+}
+
+.list-reset {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.subtle-text {
+  color: var(--subtle);
+}
+
+.bubble {
+  width: 140px;
+  height: 140px;
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.45;
+}
+
+.bubble.pink { background: #ffdbe4; top: -20px; right: 20px; }
+.bubble.mint { background: #cbe7e5; bottom: -30px; left: 30px; }
+.bubble.lemon { background: #f3f7c4; top: 50%; left: -40px; }
+
+@media (max-width: 768px) {
+  .content {
+    padding: 1.5rem 1.2rem;
+  }
+
+  .page-title {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

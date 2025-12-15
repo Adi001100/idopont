@@ -1,10 +1,26 @@
-<div class="login-container">
-    <h2>Bejelentkezés</h2>
+<section class="auth-shell">
+  <div class="card auth-card">
+    <div>
+      <div class="tag">Visszatérés</div>
+      <h2>Bejelentkezés</h2>
+      <p class="subtle-text">Lépj be a pasztell kezelőfelületre és kezdd a napod a naptárad átnézésével.</p>
+    </div>
+
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <input type="email" formControlName="email" placeholder="Email" required />
-      <input type="password" formControlName="password" placeholder="Jelszó" required />
-      <button type="submit" [disabled]="form.invalid">Bejelentkezés</button>
+      <label>
+        Email cím
+        <input type="email" formControlName="email" placeholder="pelda@domain.hu" required />
+      </label>
+      <label>
+        Jelszó
+        <input type="password" formControlName="password" placeholder="••••••••" required />
+      </label>
+
+      <button type="submit" class="btn soft" [disabled]="form.invalid">Belépés</button>
     </form>
-    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+    <p *ngIf="errorMessage" class="helper-text">{{ errorMessage }}</p>
+
+    <p class="subtle-text">Nincs még fiókod? <a routerLink="/register">Regisztrálj itt</a>.</p>
   </div>
-  
+</section>

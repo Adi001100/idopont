@@ -1,0 +1,9 @@
+section.card {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+section.card > .grid-two .card {
+  height: 100%;
+}

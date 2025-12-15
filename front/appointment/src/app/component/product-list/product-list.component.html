@@ -1,12 +1,21 @@
-<h2>Szolgáltatások</h2>
+<div class="section-title">
+  <h3>Elérhető szolgáltatások</h3>
+  <small>Finom pasztell kártyákon jelenítjük meg az adatokat.</small>
+</div>
 
-<div *ngIf="services.length === 0 && !errorMessage">Nincs még szolgáltatás.</div>
+<div *ngIf="services.length === 0 && !errorMessage" class="empty-state">
+  Nincs még szolgáltatás. Adj hozzá egy újat a bal oldali űrlappal.
+</div>
 
-<ul *ngIf="services.length > 0">
-  <li *ngFor="let service of services">
-    <strong>{{ service.name }}</strong> – {{ service.price }} Ft
-    <p>Időtartam: {{ service.durationMinutes }} perc</p>
+<ul *ngIf="services.length > 0" class="list-reset service-list">
+  <li *ngFor="let service of services" class="card">
+    <div class="service-header">
+      <div class="pill mint">{{ service.durationMinutes }} perc</div>
+      <div class="price">{{ service.price | number }} Ft</div>
+    </div>
+    <h4>{{ service.name }}</h4>
+    <p class="subtle-text">Nyugodt, letisztult élmény az ügyfeleidnek.</p>
   </li>
 </ul>
 
-<p *ngIf="errorMessage" style="color: red">{{ errorMessage }}</p>
+<p *ngIf="errorMessage" class="helper-text">{{ errorMessage }}</p>

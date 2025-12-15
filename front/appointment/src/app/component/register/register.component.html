@@ -1,13 +1,45 @@
-<h2>Regisztráció</h2>
+<section class="auth-shell">
+  <div class="card auth-card">
+    <div class="page-title">
+      <div>
+        <div class="tag">Új kezdés</div>
+        <h2>Regisztráció</h2>
+        <p class="subtle-text">Készen állsz a pasztell felületed létrehozására? Add meg az alapadatokat és indulhat is a munka.</p>
+      </div>
+      <div class="pill mint">💡 Tipp</div>
+    </div>
 
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <input formControlName="fullName" placeholder="Teljes név" /><br />
-  <input formControlName="email" placeholder="Email" /><br />
-  <input type="password" formControlName="password" placeholder="Jelszó" /><br />
-  <input formControlName="phone" placeholder="Telefon" /><br />
-  <input formControlName="address" placeholder="Cím" /><br />
-  <input formControlName="billingAddress" placeholder="Számlázási cím" /><br />
-  <button type="submit">Regisztráció</button>
-</form>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="grid-two">
+      <label>
+        Teljes név
+        <input formControlName="fullName" placeholder="Kiss Virág" />
+      </label>
+      <label>
+        Email cím
+        <input formControlName="email" placeholder="pelda@domain.hu" />
+      </label>
+      <label>
+        Jelszó
+        <input type="password" formControlName="password" placeholder="Legalább 6 karakter" />
+      </label>
+      <label>
+        Telefon
+        <input formControlName="phone" placeholder="+36 30 123 4567" />
+      </label>
+      <label>
+        Cím
+        <input formControlName="address" placeholder="1051 Budapest, ..." />
+      </label>
+      <label>
+        Számlázási cím
+        <input formControlName="billingAddress" placeholder="Számlázási adatok" />
+      </label>
 
-<div *ngIf="errorMessage" style="color:red;">{{ errorMessage }}</div>
+      <div class="form-footer">
+        <button type="submit" class="btn soft" [disabled]="form.invalid">Regisztráció</button>
+      </div>
+    </form>
+
+    <div *ngIf="errorMessage" class="helper-text">{{ errorMessage }}</div>
+  </div>
+</section>

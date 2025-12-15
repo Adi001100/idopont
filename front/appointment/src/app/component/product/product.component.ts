@@ -10,7 +10,7 @@ import { Product } from '../../models/product.model';
   standalone: true,
   imports: [CommonModule, HttpClientModule, ProductCreateComponent, ProductListComponent],
   templateUrl: './product.component.html',
-  styleUrl: './product.component.css'
+  styleUrls: ['./product.component.css']
 })
 export class ProductComponent {
   services: Product[] = [];
@@ -21,11 +21,11 @@ export class ProductComponent {
   }
 
   loadServices() {
+    const token = typeof localStorage !== 'undefined' ? localStorage.getItem('token') : '';
+
     this.http
       .get<Product[]>('http://localhost:8080/api/product/getAll', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
       })
       .subscribe({
         next: (data) => {

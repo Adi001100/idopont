@@ -1,19 +1,27 @@
-<!-- <nav>
-  <a routerLink="/">Főoldal</a>
-  <a *ngIf="!auth.isLoggedIn()" routerLink="/login">Bejelentkezés</a>
-  <a *ngIf="!auth.isLoggedIn()" routerLink="/register">Regisztráció</a>
-  <a *ngIf="auth.isLoggedIn()" routerLink="/product">Szolgáltatásaim</a>
-  <a *ngIf="auth.isLoggedIn()" routerLink="/me">Profil</a>
-  <a routerLink="/product">testszolgaltatas</a>
-  <button *ngIf="auth.isLoggedIn()" (click)="logout()">Kijelentkezés</button>
-</nav> -->
+<nav class="navbar">
+  <div class="brand">
+    <div class="brand-mark">idő</div>
+    <div>
+      <div class="brand-title">időpont</div>
+      <div class="brand-subtitle">Pastell felület</div>
+    </div>
+  </div>
 
-<nav>
-  <a routerLink="/">Főoldal</a>
-  <a routerLink="/login">Bejelentkezés</a>
-  <a routerLink="/register">Regisztráció</a>
-  <a routerLink="/product">Szolgáltatásaim</a>
-  <a routerLink="/me">Profil</a>
-  <a routerLink="/product">testszolgaltatas</a>
-  <button (click)="logout()">Kijelentkezés</button>
+  <div class="nav-links">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Főoldal</a>
+    <a routerLink="/product" routerLinkActive="active">Szolgáltatásaim</a>
+    <a routerLink="/me" routerLinkActive="active">Profil</a>
+  </div>
+
+  <div class="nav-actions">
+    <ng-container *ngIf="!auth.isLoggedIn(); else loggedIn">
+      <a routerLink="/login" class="btn ghost">Bejelentkezés</a>
+      <a routerLink="/register" class="btn soft">Regisztráció</a>
+    </ng-container>
+    <ng-template #loggedIn>
+      <button class="btn soft" (click)="logout()">Kijelentkezés</button>
+    </ng-template>
+  </div>
 </nav>
+
+<p *ngIf="errorMessage" class="nav-error">{{ errorMessage }}</p>
