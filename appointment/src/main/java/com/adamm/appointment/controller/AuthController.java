@@ -1,5 +1,6 @@
 package com.adamm.appointment.controller;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +48,7 @@ public class AuthController {
         log.info("Successful login:", loginDTO.email());
 
         return ResponseEntity.ok()
-                .headers(buildAuthCookies(tokens))
+                .headers((HttpHeaders) buildAuthCookies(tokens))
                 .build();
 
     }
@@ -56,7 +57,7 @@ public class AuthController {
     public ResponseEntity<Void> refresh(@CookieValue("refresh_token") String refreshToken) {
         AuthTokens tokens = authService.refresh(refreshToken);
         return ResponseEntity.ok()
-                .headers(buildAuthCookies(tokens))
+                .headers((HttpHeaders) buildAuthCookies(tokens))
                 .build();
     }
 

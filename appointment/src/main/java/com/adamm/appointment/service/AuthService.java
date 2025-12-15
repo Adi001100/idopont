@@ -8,7 +8,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.adamm.appointment.config.JwtService;
 import com.adamm.appointment.domain.User;
+import com.adamm.appointment.dto.AuthTokens;
 import com.adamm.appointment.dto.UserCreateDTO;
 import com.adamm.appointment.dto.UserInfoDTO;
 import com.adamm.appointment.dto.UserLoginDTO;
@@ -46,7 +48,7 @@ public class AuthService {
 
         User userToSave = new User(createDTO);
         userToSave.setPassword(passwordEncoder.encode(createDTO.password()));
-
+        
         return new UserInfoDTO(userRepository.save(userToSave));
     }
 

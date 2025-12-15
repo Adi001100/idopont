@@ -6,6 +6,8 @@ import { RegisterComponent } from './component/register/register.component';
 import { AuthGuard } from './auth/auth.guard';
 import { MeComponent } from './component/me/me.component';
 import { ProductCreateComponent } from './component/product-create/product-create.component';
+import { ApplicationConfig } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -18,6 +20,9 @@ export const routes: Routes = [
 
 ];
 
-export const appConfig = {
-  providers: [provideRouter(routes)],
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(routes),
+    provideHttpClient(),
+  ],
 };

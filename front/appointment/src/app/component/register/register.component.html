@@ -4,7 +4,8 @@
       <div>
         <div class="tag">Új kezdés</div>
         <h2>Regisztráció</h2>
-        <p class="subtle-text">Készen állsz a pasztell felületed létrehozására? Add meg az alapadatokat és indulhat is a munka.</p>
+        <p class="subtle-text">Készen állsz a pasztell felületed létrehozására? Add meg az alapadatokat és indulhat is a
+          munka.</p>
       </div>
       <div class="pill mint">💡 Tipp</div>
     </div>
@@ -13,26 +14,44 @@
       <label>
         Teljes név
         <input formControlName="fullName" placeholder="Kiss Virág" />
+        <div class="helper-text" *ngIf="getClientError('fullName')">
+          {{ getClientError('fullName') }}
+        </div>
       </label>
       <label>
         Email cím
         <input formControlName="email" placeholder="pelda@domain.hu" />
+        <div class="helper-text" *ngIf="getClientError('email')">
+          {{ getClientError('email') }}
+        </div>
       </label>
       <label>
         Jelszó
         <input type="password" formControlName="password" placeholder="Legalább 6 karakter" />
+        <div class="helper-text" *ngIf="getClientError('password')">
+          {{ getClientError('password') }}
+        </div>
       </label>
       <label>
         Telefon
         <input formControlName="phone" placeholder="+36 30 123 4567" />
+        <div class="helper-text" *ngIf="getClientError('phone')">
+          {{ getClientError('phone') }}
+        </div>
       </label>
       <label>
         Cím
         <input formControlName="address" placeholder="1051 Budapest, ..." />
+        <div class="helper-text" *ngIf="getClientError('address')">
+          {{ getClientError('address') }}
+        </div>
       </label>
       <label>
         Számlázási cím
         <input formControlName="billingAddress" placeholder="Számlázási adatok" />
+        <div class="helper-text" *ngIf="getClientError('billingAddress')">
+          {{ getClientError('billingAddress') }}
+        </div>
       </label>
 
       <div class="form-footer">

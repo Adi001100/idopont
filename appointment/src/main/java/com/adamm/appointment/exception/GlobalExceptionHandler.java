@@ -59,7 +59,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<List<ValidationError>> handleEmailAlreadyExists(UserEmailExistsException exception) {
         log.error("E-mail already exists: ", exception);
 
-        ValidationError validationError = new ValidationError("email", "E-mail already exists: " + exception.getEmail());
+        ValidationError validationError = new ValidationError("email", "Ez az e-mail cím már foglalt: " + exception.getEmail());
         return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
     }
 

@@ -15,6 +15,7 @@ import { AuthService } from '../../auth/auth.service';
 export class LoginComponent {
   form: FormGroup;
   errorMessage = '';
+  successMessage = '';
 
   constructor(
     private fb: FormBuilder,
@@ -26,6 +27,12 @@ export class LoginComponent {
       password: ['', Validators.required],
     });
   }
+
+  ngOnInit() {
+    const msg = history.state?.successMessage;
+    if (msg) this.successMessage = msg;
+  }
+
 
   onSubmit() {
     if (this.form.invalid) return;
