@@ -40,6 +40,7 @@
       </div>
     </form>
 
+    <div *ngIf="successMessage" class="helper-text success">{{ successMessage }}</div>
     <div *ngIf="errorMessage" class="helper-text">{{ errorMessage }}</div>
   </div>
 </section>
