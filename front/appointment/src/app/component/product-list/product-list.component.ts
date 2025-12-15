@@ -7,7 +7,7 @@ import { Product } from '../../models/product.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './product-list.component.html',
-  styleUrl: './product-list.component.css'
+  styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent {
   @Input() services: Product[] = [];

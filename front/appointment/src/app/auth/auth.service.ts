@@ -10,6 +10,13 @@ export class AuthService {
 
   constructor(private router: Router) {}
 
+  isLoggedIn(): boolean {
+    if (typeof localStorage === 'undefined') {
+      return false;
+    }
+    return !!localStorage.getItem('token');
+  }
+
   logout() {
     localStorage.clear();
     if (this.logoutTimer) {

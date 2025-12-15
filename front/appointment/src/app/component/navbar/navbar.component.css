@@ -1,7 +1,95 @@
-/* navbar.component.css */
-nav {
-    display: flex;
-    gap: 1rem;
-    padding: 1rem;
-    background-color: #f5f5f5;
+.navbar {
+  margin: 0 auto;
+  max-width: 1100px;
+  padding: 1.2rem 1.5rem;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.brand-mark {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--secondary), #ffe7ef);
+  color: #2a2a36;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  box-shadow: var(--shadow);
+}
+
+.brand-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.brand-subtitle {
+  font-size: 0.85rem;
+  color: var(--subtle);
+}
+
+.nav-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+}
+
+.nav-links a {
+  padding: 0.55rem 0.9rem;
+  border-radius: 12px;
+  font-weight: 600;
+  color: #273144;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.nav-links a.active,
+.nav-links a:hover {
+  background: rgba(156, 202, 214, 0.25);
+  color: #102035;
+  transform: translateY(-1px);
+}
+
+.nav-actions {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: flex-end;
+}
+
+.nav-error {
+  max-width: 1100px;
+  margin: 0 auto;
+  background: rgba(247, 205, 212, 0.3);
+  color: #b22b47;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow);
+}
+
+@media (max-width: 900px) {
+  .navbar {
+    grid-template-columns: 1fr;
+    align-items: start;
+    padding-top: 1.5rem;
+  }
+
+  .nav-links {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .nav-actions {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
 }

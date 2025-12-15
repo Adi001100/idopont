@@ -1,0 +1,37 @@
+@keyframes floaty {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.app-shell {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.background {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(255, 206, 210, 0.6), transparent 35%),
+    radial-gradient(circle at 80% 0%, rgba(197, 225, 250, 0.5), transparent 30%),
+    radial-gradient(circle at 70% 80%, rgba(207, 227, 192, 0.6), transparent 35%),
+    linear-gradient(145deg, #fdf7ff 0%, #f5f9ff 100%);
+  filter: blur(0px);
+  opacity: 0.9;
+  z-index: 0;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 3.5rem;
+}

@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
   templateUrl: './product-create.component.html',
-  styleUrl: './product-create.component.css'
+  styleUrls: ['./product-create.component.css']
 })
 export class ProductCreateComponent {
   form: FormGroup;
@@ -33,12 +33,11 @@ export class ProductCreateComponent {
     if (this.form.invalid) return;
 
     const serviceData = this.form.value;
+    const token = typeof localStorage !== 'undefined' ? localStorage.getItem('token') : '';
 
     this.http
       .post<{ name: string }>('http://localhost:8080/api/product/create', serviceData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
       })
       .subscribe({
         next: (res) => {

@@ -1,0 +1,24 @@
+.service-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.service-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.35rem;
+}
+
+.price {
+  font-weight: 700;
+  color: #1f2f45;
+}
+
+.empty-state {
+  background: rgba(156, 202, 214, 0.18);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  color: #263144;
+  font-weight: 600;
+}
