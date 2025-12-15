@@ -14,7 +14,7 @@
   </div>
 
   <div class="nav-actions">
-    <ng-container *ngIf="!auth.isLoggedIn(); else loggedIn">
+    <ng-container *ngIf="!(isLoggedIn$ | async); else loggedIn">
       <a routerLink="/login" class="btn ghost">Bejelentkezés</a>
       <a routerLink="/register" class="btn soft">Regisztráció</a>
     </ng-container>
