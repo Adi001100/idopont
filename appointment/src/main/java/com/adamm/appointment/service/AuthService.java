@@ -3,6 +3,8 @@ package com.adamm.appointment.service;
 import java.time.Instant;
 import java.util.Optional;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,8 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
 
     public UserInfoDTO createUser(UserCreateDTO createDTO) {
@@ -46,22 +50,37 @@ public class AuthService {
         return new UserInfoDTO(userRepository.save(userToSave));
     }
 
-    public String login(UserLoginDTO loginDTO) {
+    public AuthTokens login(UserLoginDTO loginDTO) {
         String email = loginDTO.email();
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(email, loginDTO.password()));
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundByEmailException(email));
 
         checkUserCanLogin(user);
 
-        if (!passwordEncoder.matches(loginDTO.password(), user.getPassword())){
-            user.setFailedLoginAttempts(user.getFailedLoginAttempts()+1);
-            userRepository.save(user);
-            throw new InvalidCredentialsException("Nem megfelelő belépési adatok");
-        }
-
         user.setLastLogin(Instant.now());
         userRepository.save(user);
-        return "siker";
+
+        String accessToken = jwtService.generateAccessToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+
+        return new AuthTokens(accessToken, refreshToken);
+    }
+
+    public AuthTokens refresh(String refreshToken) {
+        String username = jwtService.extractUsername(refreshToken);
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UserNotFoundByEmailException(username));
+
+        if (!jwtService.isTokenValid(refreshToken, user)) {
+            throw new InvalidCredentialsException("Invalid refresh token");
+        }
+
+        String newAccessToken = jwtService.generateAccessToken(user);
+        String newRefreshToken = jwtService.generateRefreshToken(user);
+        return new AuthTokens(newAccessToken, newRefreshToken);
     }
 
     private void checkUserCanLogin(User user) {

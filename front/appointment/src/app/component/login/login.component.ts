@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../auth/auth.service';
@@ -18,7 +18,6 @@ export class LoginComponent {
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private router: Router,
     private authService: AuthService
   ) {
@@ -31,19 +30,17 @@ export class LoginComponent {
   onSubmit() {
     if (this.form.invalid) return;
 
-    this.http
-      .post<{}>('http://localhost:8080/api/auth/login', this.form.value)
-      .subscribe({
-        next: (res) => {
-          this.router.navigate(['/']);
-        },
-        error: (err) => {
-          if (Array.isArray(err.error) && err.error.length > 0) {
-            this.errorMessage = err.error[0].message;
-          } else {
-            this.errorMessage = 'Ismeretlen hiba történt.';
-          }
+    this.authService.login(this.form.value).subscribe({
+      next: () => {
+        this.router.navigate(['/']);
+      },
+      error: (err) => {
+        if (Array.isArray(err.error) && err.error.length > 0) {
+          this.errorMessage = err.error[0].message;
+        } else {
+          this.errorMessage = 'Ismeretlen hiba történt.';
         }
-      });
+      }
+    });
   }
 }
