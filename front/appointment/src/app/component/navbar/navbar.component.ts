@@ -13,11 +13,12 @@ import { HttpClientModule } from '@angular/common/http';
 })
 export class NavbarComponent {
   errorMessage = '';
-  isLoggedIn$ = this.auth.isLoggedIn$;
+  isLoggedIn$;
+  authService: any;
 
   constructor(
     public auth: AuthService,
-  ) { }
+  ) { this.isLoggedIn$ = this.auth.isLoggedIn$; }
 
   logout() {
     this.auth.logout().subscribe({

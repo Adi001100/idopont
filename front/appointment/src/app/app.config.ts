@@ -7,7 +7,8 @@ import { AuthGuard } from './auth/auth.guard';
 import { MeComponent } from './component/me/me.component';
 import { ProductCreateComponent } from './component/product-create/product-create.component';
 import { ApplicationConfig } from '@angular/core';
-import { provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { AuthInterceptor } from './auth/auth.interceptro';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -16,13 +17,12 @@ export const routes: Routes = [
   { path: 'product', canActivate: [AuthGuard], component: ProductComponent },
   { path: 'create', canActivate: [AuthGuard], component: ProductCreateComponent },
   { path: 'me', canActivate: [AuthGuard], component: MeComponent },
-  { path: 'product', loadComponent: () => import('./component/product/product.component').then(m => m.ProductComponent) }
-
 ];
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(),
-  ],
+    provideHttpClient(withInterceptorsFromDi()),
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  ]
 };

@@ -14,7 +14,6 @@ export class AuthService {
   readonly isLoggedIn$ = this.loggedInSubject.asObservable();
 
   constructor(private router: Router, private http: HttpClient) {
-    this.refreshLoginState().subscribe();
   }
 
   isLoggedIn(): boolean {
@@ -32,19 +31,6 @@ export class AuthService {
             clearTimeout(this.logoutTimer);
           }
           this.loggedInSubject.next(true);
-        })
-      );
-  }
-
-  refreshLoginState(): Observable<boolean> {
-    return this.http
-      .get('http://localhost:8080/api/user/me', { withCredentials: true })
-      .pipe(
-        tap(() => this.loggedInSubject.next(true)),
-        map(() => true),
-        catchError(() => {
-          this.loggedInSubject.next(false);
-          return of(false);
         })
       );
   }

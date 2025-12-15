@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,9 +41,7 @@ public class ProductController {
         return new ResponseEntity<>(infoDTO, HttpStatus.CREATED);
     }
     
-
-    // @PreAuthorize("hasAuthority('FULL_ADMIN')")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('FULL_ADMIN') or hasAuthority('ADMIN')")
     @GetMapping("/getAll")
     public ResponseEntity<List<ProductInfoDTO>> getAll() {
         log.info("GET request at /product/getAll");
@@ -62,7 +61,7 @@ public class ProductController {
     }
 
     @PreAuthorize("hasAuthority('FULL_ADMIN') or hasAuthority('ADMIN')")
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<ProductInfoDTO> delete(@PathVariable Long id){
         log.info("GET request at /product/delete/" + id);
         productService.delete(id);

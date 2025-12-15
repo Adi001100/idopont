@@ -33,11 +33,10 @@ export class ProductCreateComponent {
     if (this.form.invalid) return;
 
     const serviceData = this.form.value;
-    const token = typeof localStorage !== 'undefined' ? localStorage.getItem('token') : '';
 
     this.http
       .post<{ name: string }>('http://localhost:8080/api/product/create', serviceData, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {}
+        withCredentials: true
       })
       .subscribe({
         next: (res) => {

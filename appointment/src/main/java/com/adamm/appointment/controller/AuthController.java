@@ -6,6 +6,7 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +20,6 @@ import com.adamm.appointment.config.JwtService;
 import com.adamm.appointment.service.AuthService;
 
 import lombok.extern.slf4j.Slf4j;
-
-
-
 
 @RestController
 @RequestMapping("api/auth")
@@ -56,12 +54,18 @@ public class AuthController {
 
     }
 
-    @PostMapping("/refresh")
+    @GetMapping("/refresh")
     public ResponseEntity<Void> refresh(@CookieValue("refresh_token") String refreshToken) {
         AuthTokens tokens = authService.refresh(refreshToken);
         return ResponseEntity.ok()
                 .headers((HttpHeaders) buildAuthCookies(tokens))
                 .build();
+    }
+
+    @GetMapping("/check")
+    public ResponseEntity<Void> checkAuth() {
+        // Ha idáig eljut, akkor a JWT érvényes
+        return ResponseEntity.ok().build();
     }
 
     private MultiValueMap<String, String> buildAuthCookies(AuthTokens tokens) {

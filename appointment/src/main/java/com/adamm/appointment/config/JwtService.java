@@ -24,7 +24,7 @@ public class JwtService {
     @Value("${application.security.jwt.secret-key:ZmFrZVNlY3JldEtleUZvckFwcG9pbnRtZW50QXBwVG9rZW4=}")
     private String secretKey;
 
-    @Value("${application.security.jwt.access-expiration-minutes:15}")
+    @Value("${application.security.jwt.access-expiration-minutes:1}")
     private long accessExpirationMinutes;
 
     @Value("${application.security.jwt.refresh-expiration-days:7}")

@@ -22,6 +22,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.adamm.appointment.config.JwtService;
 import com.adamm.appointment.service.UserService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -39,22 +40,26 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(ex -> ex
+                    .authenticationEntryPoint((req, res, e) -> res.sendError(401)) // nincs/lejárt token
+                    .accessDeniedHandler((req, res, e) -> res.sendError(403)) // nincs jogosultság
+                )
                 .authorizeHttpRequests(requests -> requests
-                    .requestMatchers("/api/auth/**",
-                            "/api/auth/register",
-                            "/api/auth/refresh",
-                            "/api/user/forgot-password",
-                            "/api/user/reset-password"
-                    ).permitAll()
-                    .anyRequest().authenticated()
+                .requestMatchers("/api/auth/**",
+                        "/api/auth/register",
+                        "/api/auth/refresh",
+                        "/api/user/forgot-password",
+                        "/api/user/reset-password"
+                ).permitAll()
+                .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout -> logout
-                    .logoutUrl("/api/auth/logout")
-                    .logoutSuccessHandler(cookieClearingLogoutSuccessHandler())
-                    .invalidateHttpSession(true)
-                    .deleteCookies("JSESSIONID")
+                .logoutUrl("/api/auth/logout")
+                .logoutSuccessHandler(cookieClearingLogoutSuccessHandler())
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
                 )
                 .userDetailsService(userService)
                 .formLogin(form -> form.disable());
@@ -78,7 +83,7 @@ public class SecurityConfig {
     @Bean
     public LogoutSuccessHandler cookieClearingLogoutSuccessHandler() {
         return (request, response, authentication) -> {
-            response.setStatus(org.springframework.http.HttpServletResponse.SC_OK);
+            response.setStatus(HttpServletResponse.SC_OK);
             response.addHeader(org.springframework.http.HttpHeaders.SET_COOKIE, jwtService.getAccessTokenDeletionCookie().toString());
             response.addHeader(org.springframework.http.HttpHeaders.SET_COOKIE, jwtService.getRefreshTokenDeletionCookie().toString());
         };
