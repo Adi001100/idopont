@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
 import com.adamm.appointment.domain.User;
@@ -28,6 +29,46 @@ public class JwtService {
 
     @Value("${application.security.jwt.refresh-expiration-days:7}")
     private long refreshExpirationDays;
+
+    public ResponseCookie buildAccessTokenCookie(String token) {
+        return ResponseCookie.from("access_token", token)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .sameSite("None")
+                .maxAge(accessExpirationMinutes * 60)
+                .build();
+    }
+
+    public ResponseCookie buildRefreshTokenCookie(String token) {
+        return ResponseCookie.from("refresh_token", token)
+                .httpOnly(true)
+                .secure(true)
+                .path("/api/auth/refresh")
+                .sameSite("None")
+                .maxAge(refreshExpirationDays * 24 * 60 * 60)
+                .build();
+    }
+
+    public ResponseCookie getAccessTokenDeletionCookie() {
+        return ResponseCookie.from("access_token", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .sameSite("None")
+                .maxAge(0)
+                .build();
+    }
+
+    public ResponseCookie getRefreshTokenDeletionCookie() {
+        return ResponseCookie.from("refresh_token", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/api/auth/refresh")
+                .sameSite("None")
+                .maxAge(0)
+                .build();
+    }
 
     public String generateAccessToken(User user) {
         return buildToken(user, Instant.now().plusSeconds(accessExpirationMinutes * 60));

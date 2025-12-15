@@ -14,10 +14,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.adamm.appointment.config.JwtService;
 import com.adamm.appointment.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ public class SecurityConfig {
 
     private final UserService userService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtService jwtService;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -49,7 +52,7 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout -> logout
                     .logoutUrl("/api/auth/logout")
-                    .logoutSuccessUrl("/api/auth/login?logout")
+                    .logoutSuccessHandler(cookieClearingLogoutSuccessHandler())
                     .invalidateHttpSession(true)
                     .deleteCookies("JSESSIONID")
                 )
@@ -70,6 +73,15 @@ public class SecurityConfig {
         authProvider.setUserDetailsService(userService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
+    }
+
+    @Bean
+    public LogoutSuccessHandler cookieClearingLogoutSuccessHandler() {
+        return (request, response, authentication) -> {
+            response.setStatus(org.springframework.http.HttpServletResponse.SC_OK);
+            response.addHeader(org.springframework.http.HttpHeaders.SET_COOKIE, jwtService.getAccessTokenDeletionCookie().toString());
+            response.addHeader(org.springframework.http.HttpHeaders.SET_COOKIE, jwtService.getRefreshTokenDeletionCookie().toString());
+        };
     }
 
     @Bean

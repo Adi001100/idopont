@@ -15,6 +15,7 @@ import com.adamm.appointment.dto.AuthTokens;
 import com.adamm.appointment.dto.UserCreateDTO;
 import com.adamm.appointment.dto.UserInfoDTO;
 import com.adamm.appointment.dto.UserLoginDTO;
+import com.adamm.appointment.config.JwtService;
 import com.adamm.appointment.service.AuthService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,9 +29,11 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthController {
 
     private final AuthService authService;
+    private final JwtService jwtService;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, JwtService jwtService) {
         this.authService = authService;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/register")
@@ -62,24 +65,11 @@ public class AuthController {
     }
 
     private MultiValueMap<String, String> buildAuthCookies(AuthTokens tokens) {
-        ResponseCookie accessCookie = ResponseCookie.from("access_token", tokens.accessToken())
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .sameSite("None")
-                .maxAge(15 * 60)
-                .build();
-        ResponseCookie refreshCookie = ResponseCookie.from("refresh_token", tokens.refreshToken())
-                .httpOnly(true)
-                .secure(true)
-                .path("/api/auth/refresh")
-                .sameSite("None")
-                .maxAge(30L * 24 * 60 * 60)
-                .build();
-
-        org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
-        headers.add(org.springframework.http.HttpHeaders.SET_COOKIE, accessCookie.toString());
-        headers.add(org.springframework.http.HttpHeaders.SET_COOKIE, refreshCookie.toString());
+        HttpHeaders headers = new HttpHeaders();
+        ResponseCookie accessCookie = jwtService.buildAccessTokenCookie(tokens.accessToken());
+        ResponseCookie refreshCookie = jwtService.buildRefreshTokenCookie(tokens.refreshToken());
+        headers.add(HttpHeaders.SET_COOKIE, accessCookie.toString());
+        headers.add(HttpHeaders.SET_COOKIE, refreshCookie.toString());
         return headers;
     }
 }
