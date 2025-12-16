@@ -1,9 +1,9 @@
-<section class="card profile-card">
+<section class="card profile-card" *ngIf="user$ | async as user">
   <div class="page-title">
     <div>
       <div class="tag">Profil</div>
-      <h2>Saját adatok</h2>
-      <p class="subtle-text">Tartsd naprakészen az elérhetőségeidet és számlázási adataidat.</p>
+      <h2>{{ user.fullName }}</h2>
+      <p class="subtle-text">Szerepkör: {{ user.role }}</p>
     </div>
     <div class="pill pink">🧾</div>
   </div>
@@ -11,11 +11,12 @@
   <div class="grid-two">
     <div>
       <h4>Kapcsolati adatok</h4>
-      <p class="subtle-text">A backend integráció után itt jelennek meg az aktuális adatok.</p>
+      <p class="subtle-text">Email: {{ user.email }}</p>
+      <p class="subtle-text">Telefon: {{ user.phone }}</p>
     </div>
     <div>
       <h4>Számlázási adatok</h4>
-      <p class="subtle-text">Add meg a számlázási címed, hogy minden tranzakció rendezett legyen.</p>
+      <p class="subtle-text">Cím: {{ user.billingAddress }}</p>
     </div>
   </div>
 </section>

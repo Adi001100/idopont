@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { PopupService } from '../../services/popup.service';
+import { UserRole } from '../../models/user.model';
 
 @Component({
   selector: 'app-navbar',
@@ -15,17 +16,24 @@ import { PopupService } from '../../services/popup.service';
 export class NavbarComponent {
   errorMessage = '';
   isLoggedIn$;
-  authService: any;
+  user$;
 
   constructor(
     public auth: AuthService,
     private popupService: PopupService
-  ) { this.isLoggedIn$ = this.auth.isLoggedIn$; }
+  ) {
+    this.isLoggedIn$ = this.auth.isLoggedIn$;
+    this.user$ = this.auth.currentUser$;
+  }
 
   confirmLogout() {
     this.popupService.confirm('Biztosan ki szeretne jelentkezni?', () => {
       this.logout();
     });
+  }
+
+  canManageServices(userRole: UserRole | null): boolean {
+    return userRole === 'ADMIN' || userRole === 'FULL_ADMIN';
   }
 
   logout() {

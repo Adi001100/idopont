@@ -74,8 +74,10 @@ public class User implements UserDetails {
         this.address = userCreateDTO.address();
         this.billingAddress = userCreateDTO.billingAddress();
         this.appointments = new ArrayList<>();
-        this.active = false;
+        this.active = true;
         this.locked = false;
+        this.role = Role.CLIENT;
+        this.failedLoginAttempts = 0;
     }
 
     @Override

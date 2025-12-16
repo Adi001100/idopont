@@ -1,0 +1,27 @@
+<section class="card catalog">
+  <div class="page-title">
+    <div>
+      <div class="tag">Vásárlói felület</div>
+      <h2>Elérhető szolgáltatások</h2>
+      <p class="subtle-text">Böngészd a szolgáltatáslistát és válaszd ki a számodra megfelelőt.</p>
+    </div>
+    <div class="pill mint">Nyitott</div>
+  </div>
+
+  <div *ngIf="loading" class="subtle-text">Betöltés...</div>
+
+  <div class="catalog-grid" *ngIf="!loading">
+    <article class="card" *ngFor="let service of services">
+      <div class="pill pink">{{ service.durationMinutes }} perc</div>
+      <h3>{{ service.name }}</h3>
+      <div class="catalog-meta">
+        <strong>{{ service.price | currency:'HUF':'symbol-narrow' }}</strong>
+        <span class="subtle-text">Aktív</span>
+      </div>
+    </article>
+
+    <article class="card empty" *ngIf="services.length === 0">
+      <p class="subtle-text">Jelenleg nincs elérhető szolgáltatás.</p>
+    </article>
+  </div>
+</section>

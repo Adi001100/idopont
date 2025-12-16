@@ -13,6 +13,7 @@ public class AuthenticatedUserInfoDTO {
     private final String phone;
     private final String address;
     private final String billingAddress;
+    private final String role;
 
     public AuthenticatedUserInfoDTO(User user) {
         this.fullName = user.getFullName();
@@ -21,5 +22,6 @@ public class AuthenticatedUserInfoDTO {
         this.phone = user.getPhone();
         this.address = user.getAddress();
         this.billingAddress = user.getBillingAddress();
+        this.role = user.getRole().name();
     }
 }

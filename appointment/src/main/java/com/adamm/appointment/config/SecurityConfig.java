@@ -49,7 +49,8 @@ public class SecurityConfig {
                         "/api/auth/register",
                         "/api/auth/refresh",
                         "/api/user/forgot-password",
-                        "/api/user/reset-password"
+                        "/api/user/reset-password",
+                        "/api/product/catalog"
                 ).permitAll()
                 .anyRequest().authenticated()
                 )

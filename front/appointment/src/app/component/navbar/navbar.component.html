@@ -12,15 +12,23 @@
     <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
       Főoldal
     </a>
+    <a routerLink="/catalog" routerLinkActive="active">
+      Vásárlói nézet
+    </a>
 
     <!-- Csak bejelentkezve -->
     <ng-container *ngIf="isLoggedIn$ | async">
-      <a routerLink="/product" routerLinkActive="active">
-        Szolgáltatásaim
-      </a>
-      <a routerLink="/me" routerLinkActive="active">
-        Profil
-      </a>
+      <ng-container *ngIf="user$ | async as user">
+        <a *ngIf="canManageServices(user.role)" routerLink="/product" routerLinkActive="active">
+          Szolgáltató admin
+        </a>
+        <a *ngIf="user.role === 'FULL_ADMIN'" routerLink="/full-admin" routerLinkActive="active">
+          Teljes admin
+        </a>
+        <a routerLink="/me" routerLinkActive="active">
+          Profil
+        </a>
+      </ng-container>
     </ng-container>
   </div>
 
