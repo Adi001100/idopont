@@ -1,0 +1,36 @@
+<section class="card">
+  <div class="page-title">
+    <div>
+      <div class="tag">Full admin</div>
+      <h2>Felhasználók kezelése</h2>
+      <p class="subtle-text">Itt csak a teljes admin érhető el – szerepkörök és jogosultságok kezelése.</p>
+    </div>
+    <div class="pill lemon">Csak neked</div>
+  </div>
+
+  <div class="admin-table" *ngIf="users.length > 0; else emptyState">
+    <div class="admin-row admin-head">
+      <div>Név</div>
+      <div>Email</div>
+      <div>Státusz</div>
+      <div>Szerepkör</div>
+    </div>
+
+    <div class="admin-row" *ngFor="let user of users">
+      <div>{{ user.fullName }}</div>
+      <div class="subtle-text">{{ user.email }}</div>
+      <div>
+        <span class="pill" [class.pink]="user.locked" [class.mint]="user.active">{{ user.locked ? 'Zárolva' : 'Aktív' }}</span>
+      </div>
+      <div>
+        <select [value]="user.role" (change)="onRoleChange(user, $event)">
+          <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #emptyState>
+    <p class="subtle-text">Még nincsenek felhasználók.</p>
+  </ng-template>
+</section>

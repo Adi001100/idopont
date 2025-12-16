@@ -15,6 +15,10 @@ export class ProductService {
     return this.http.get<Product[]>(`${this.apiUrl}/getAll`, { withCredentials: true });
   }
 
+  getCatalog(): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.apiUrl}/catalog`);
+  }
+
   get(id: number): Observable<Product> {
     return this.http.get<Product>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
@@ -24,7 +28,7 @@ export class ProductService {
   }
 
   update(id: number, service: Product): Observable<Product> {
-    return this.http.put<Product>(`${this.apiUrl}/${id}`, service, { withCredentials: true });
+    return this.http.put<Product>(`${this.apiUrl}/update/${id}`, service, { withCredentials: true });
   }
 
   delete(id: number): Observable<void> {

@@ -5,8 +5,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import com.adamm.appointment.domain.User;
 import com.adamm.appointment.dto.AuthenticatedUserInfoDTO;
+import com.adamm.appointment.dto.UserAdminInfoDTO;
+import com.adamm.appointment.dto.UserRoleUpdateDTO;
+import com.adamm.appointment.enums.Role;
+import com.adamm.appointment.exception.UserNotFoundByIdException;
 import com.adamm.appointment.exception.UserNotFoundByEmailException;
 
 import org.springframework.security.core.Authentication;
@@ -34,5 +40,21 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findByEmail(email)
                                     .orElseThrow(() -> new UserNotFoundByEmailException(email));;
         return new AuthenticatedUserInfoDTO(user);
+    }
+
+    public List<UserAdminInfoDTO> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(UserAdminInfoDTO::new)
+                .toList();
+    }
+
+    public UserAdminInfoDTO updateUserRole(Long id, UserRoleUpdateDTO roleUpdateDTO) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundByIdException(id));
+
+        Role newRole = roleUpdateDTO.role();
+        user.setRole(newRole);
+        return new UserAdminInfoDTO(userRepository.save(user));
     }
 }

@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { AuthenticatedUser, UserRole } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +13,11 @@ export class AuthService {
   private logoutTimer: any;
   private loggedInSubject = new BehaviorSubject<boolean>(false);
   readonly isLoggedIn$ = this.loggedInSubject.asObservable();
+  private currentUserSubject = new BehaviorSubject<AuthenticatedUser | null>(null);
+  readonly currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private router: Router, private http: HttpClient) {
-    this.check().subscribe();
+    this.loadCurrentUser().subscribe();
   }
 
   isLoggedIn(): boolean {
@@ -27,26 +30,32 @@ export class AuthService {
         withCredentials: true
       })
       .pipe(
-        tap(() => {
-          if (this.logoutTimer) {
-            clearTimeout(this.logoutTimer);
-          }
+        switchMap(() => this.loadCurrentUser()),
+        map(() => void 0)
+      );
+  }
+
+  loadCurrentUser(): Observable<AuthenticatedUser | null> {
+    return this.http
+      .get<AuthenticatedUser>('http://localhost:8080/api/user/me', { withCredentials: true })
+      .pipe(
+        tap(user => {
           this.loggedInSubject.next(true);
+          this.currentUserSubject.next(user);
+        }),
+        catchError(() => {
+          this.loggedInSubject.next(false);
+          this.currentUserSubject.next(null);
+          return of(null);
         })
       );
   }
 
-  check(): Observable<boolean> {
-    return this.http
-      .get<void>('http://localhost:8080/api/auth/check', { withCredentials: true }) // vagy /api/user/me
-      .pipe(
-        map(() => true),
-        tap(ok => this.loggedInSubject.next(ok)),
-        catchError(() => {
-          this.loggedInSubject.next(false);
-          return of(false);
-        })
-      );
+  ensureCurrentUser(): Observable<AuthenticatedUser | null> {
+    if (this.currentUserSubject.value) {
+      return of(this.currentUserSubject.value);
+    }
+    return this.loadCurrentUser();
   }
 
   logout(): Observable<void> {
@@ -59,8 +68,15 @@ export class AuthService {
       .pipe(
         tap(() => {
           this.loggedInSubject.next(false);
+          this.currentUserSubject.next(null);
           this.router.navigate(['/login'], { state: { successMessage: 'Sikeres kijelentkezés' } });
         })
       );
+  }
+
+  hasRole(...roles: UserRole[]): Observable<boolean> {
+    return this.ensureCurrentUser().pipe(
+      map(user => !!user && roles.includes(user.role))
+    );
   }
 }

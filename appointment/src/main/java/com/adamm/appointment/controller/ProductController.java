@@ -32,6 +32,14 @@ public class ProductController {
 
     private final ProductService productService;
 
+    @GetMapping("/catalog")
+    public ResponseEntity<List<ProductInfoDTO>> getCatalog() {
+        log.info("GET request at /product/catalog");
+        List<ProductInfoDTO> resulDTOs = productService.getAll();
+        log.info("Public catalog listed");
+        return new ResponseEntity<>(resulDTOs, HttpStatus.OK);
+    }
+
     @PreAuthorize("hasAuthority('FULL_ADMIN') or hasAuthority('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<ProductInfoDTO> create(@RequestBody ProductCreateDTO createDTO) {

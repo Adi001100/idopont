@@ -104,4 +104,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(UserNotFoundByIdException.class)
+    public ResponseEntity<List<ValidationError>> handleUserNotFoundById(UserNotFoundByIdException exception) {
+        log.error("User not found by id", exception);
+
+        ValidationError validationError = new ValidationError("id", exception.getMessage());
+        return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
+    }
+
 }
