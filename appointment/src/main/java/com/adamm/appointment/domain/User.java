@@ -68,7 +68,7 @@ public class User implements UserDetails {
     }
 
     public User(UserCreateDTO userCreateDTO) {
-        this.fullName = userCreateDTO.firstName() + " " + userCreateDTO.lastName();
+        this.fullName = userCreateDTO.fullName();
         this.email = userCreateDTO.email();
         this.phone = userCreateDTO.phone();
         this.address = userCreateDTO.address();

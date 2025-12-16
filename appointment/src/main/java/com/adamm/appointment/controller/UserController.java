@@ -12,6 +12,8 @@ import com.adamm.appointment.dto.AuthenticatedUserInfoDTO;
 import com.adamm.appointment.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 
@@ -33,6 +35,12 @@ public class UserController {
         log.info("User info sent succesfully");
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
+
+    @GetMapping("/asd")
+    public String asd(@RequestParam String param) {
+        return new String();
+    }
+    
     
 }
  

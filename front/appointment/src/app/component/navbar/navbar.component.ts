@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
+import { PopupService } from '../../services/popup.service';
 
 @Component({
   selector: 'app-navbar',
@@ -13,28 +14,32 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 })
 export class NavbarComponent {
   errorMessage = '';
+  isLoggedIn$;
+  authService: any;
 
   constructor(
     public auth: AuthService,
-    private http: HttpClient,
-    private router: Router,
-  ) { }
+    private popupService: PopupService
+  ) { this.isLoggedIn$ = this.auth.isLoggedIn$; }
+
+  confirmLogout() {
+    this.popupService.confirm('Biztosan ki szeretne jelentkezni?', () => {
+      this.logout();
+    });
+  }
 
   logout() {
-    this.http
-      .post<{}>('http://localhost:8080/api/auth/logout', {}, {withCredentials: true})
-      .subscribe({
-        next: (res) => {
-          this.errorMessage = 'Sikeres kijelentkezés'
-          this.router.navigate(['/']);
-        },
-        error: (err) => {
-          if (Array.isArray(err.error) && err.error.length > 0) {
-            this.errorMessage = err.error[0].message;
-          } else {
-            this.errorMessage = 'Ismeretlen hiba történt.';
-          }
+    this.auth.logout().subscribe({
+      next: () => {
+        this.popupService.success('Sikeresen kijelentkezett.');
+      },
+      error: (err) => {
+        if (Array.isArray(err.error) && err.error.length > 0) {
+          this.popupService.error(err.error[0].message);
+        } else {
+          this.popupService.error('Hiba történt a kijelentkezés során.');
         }
-      });
+      }
+    });
   }
 }

@@ -12,22 +12,22 @@ export class ProductService {
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.apiUrl);
+    return this.http.get<Product[]>(`${this.apiUrl}/getAll`, { withCredentials: true });
   }
 
   get(id: number): Observable<Product> {
-    return this.http.get<Product>(`${this.apiUrl}/${id}`);
+    return this.http.get<Product>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
 
   create(service: Product): Observable<Product> {
-    return this.http.post<Product>(this.apiUrl, service);
+    return this.http.post<Product>(`${this.apiUrl}/create`, service, { withCredentials: true });
   }
 
   update(id: number, service: Product): Observable<Product> {
-    return this.http.put<Product>(`${this.apiUrl}/${id}`, service);
+    return this.http.put<Product>(`${this.apiUrl}/${id}`, service, { withCredentials: true });
   }
 
   delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/delete/${id}`, { withCredentials: true });
   }
 }

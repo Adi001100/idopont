@@ -1,0 +1,20 @@
+<div class="backdrop" *ngIf="state$ | async as s" (click)="close()">
+  <div class="card" (click)="$event.stopPropagation()" [class]="s.type">
+    <div class="header">
+      <h3>{{ s.title }}</h3>
+    </div>
+
+    <p class="message">{{ s.message }}</p>
+
+    <div class="actions">
+      <ng-container *ngIf="s.type === 'confirm'; else okOnly">
+        <button type="button" class="btn" (click)="cancel(s)">{{ s.cancelText || 'Mégse' }}</button>
+        <button type="button" class="btn soft" (click)="confirm(s)">{{ s.confirmText || 'Igen' }}</button>
+      </ng-container>
+
+      <ng-template #okOnly>
+        <button type="button" class="btn soft" (click)="close()">OK</button>
+      </ng-template>
+    </div>
+  </div>
+</div>

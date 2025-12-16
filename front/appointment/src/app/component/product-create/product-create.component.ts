@@ -2,7 +2,8 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ProductService } from '../../services/product.service';
+import { PopupService } from '../../services/popup.service';
 
 @Component({
   selector: 'app-product-create',
@@ -19,8 +20,8 @@ export class ProductCreateComponent {
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
-    private router: Router
+    private produsctService: ProductService,
+    private popupService: PopupService
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -32,21 +33,17 @@ export class ProductCreateComponent {
   onSubmit() {
     if (this.form.invalid) return;
 
-    const serviceData = this.form.value;
-    const token = typeof localStorage !== 'undefined' ? localStorage.getItem('token') : '';
+    const productData = this.form.value;
 
-    this.http
-      .post<{ name: string }>('http://localhost:8080/api/product/create', serviceData, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {}
-      })
+    this.produsctService.create(productData)
       .subscribe({
         next: (res) => {
-          this.errorMessage = res.name + ' sikeresen létrehozva.';
+          this.popupService.success(res.name + ' sikeresen létrehozva.');
           this.serviceCreated.emit();
           this.form.reset();
         },
         error: (err) => {
-          this.errorMessage = 'Hiba történt a létrehozás során.';
+          this.popupService.error('Hiba történt a szolgáltatás létrehozása során.');
         }
       });
   }

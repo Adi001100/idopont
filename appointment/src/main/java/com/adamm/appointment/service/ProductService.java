@@ -3,6 +3,7 @@ package com.adamm.appointment.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.adamm.appointment.domain.Product;
 import com.adamm.appointment.dto.ProductCreateDTO;
@@ -26,7 +27,7 @@ public class ProductService {
     }
 
     public List<ProductInfoDTO> getAll() {
-        return productRepository.findAll()
+        return productRepository.findAllByActiveTrue()
                 .stream()
                 .map(product -> new ProductInfoDTO(product))
                 .toList();
@@ -43,6 +44,7 @@ public class ProductService {
         return new ProductInfoDTO(product.update(updateDTO));
     }
 
+    @Transactional
     public void delete(Long id) {
         productRepository.findById(id)
                         .orElseThrow(() -> new ProductNotFoundByIdException(id))
@@ -50,7 +52,7 @@ public class ProductService {
                                        
     }
 
-    //ezt ahhoz kell hogy ha törli a felhasználóját töröljük mellé az összes beállítását is
+    //ez ahhoz kell hogy ha törli a felhasználóját töröljük mellé az összes beállítását is
     public void deleteForever(){
         //TODO
     }

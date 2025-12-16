@@ -8,18 +8,34 @@
   </div>
 
   <div class="nav-links">
-    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Főoldal</a>
-    <a routerLink="/product" routerLinkActive="active">Szolgáltatásaim</a>
-    <a routerLink="/me" routerLinkActive="active">Profil</a>
+    <!-- Főoldal mindig látszik -->
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      Főoldal
+    </a>
+
+    <!-- Csak bejelentkezve -->
+    <ng-container *ngIf="isLoggedIn$ | async">
+      <a routerLink="/product" routerLinkActive="active">
+        Szolgáltatásaim
+      </a>
+      <a routerLink="/me" routerLinkActive="active">
+        Profil
+      </a>
+    </ng-container>
   </div>
 
   <div class="nav-actions">
-    <ng-container *ngIf="!auth.isLoggedIn(); else loggedIn">
+    <!-- Nincs bejelentkezve -->
+    <ng-container *ngIf="!(isLoggedIn$ | async); else loggedIn">
       <a routerLink="/login" class="btn ghost">Bejelentkezés</a>
       <a routerLink="/register" class="btn soft">Regisztráció</a>
     </ng-container>
+
+    <!-- Bejelentkezve -->
     <ng-template #loggedIn>
-      <button class="btn soft" (click)="logout()">Kijelentkezés</button>
+      <button class="btn soft" (click)="confirmLogout()">
+        Kijelentkezés
+      </button>
     </ng-template>
   </div>
 </nav>

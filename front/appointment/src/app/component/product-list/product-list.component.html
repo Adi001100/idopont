@@ -14,7 +14,8 @@
       <div class="price">{{ service.price | number }} Ft</div>
     </div>
     <h4>{{ service.name }}</h4>
-    <p class="subtle-text">Nyugodt, letisztult élmény az ügyfeleidnek.</p>
+    <button class="delete" (click)="confirmDeleteService(service.id)">&#10005;</button>
+    <button class="edit" (click)="editService(service.id)">&#9998;</button>
   </li>
 </ul>
 

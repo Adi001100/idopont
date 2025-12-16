@@ -133,6 +133,10 @@ input:focus,
   margin-top: -0.25rem;
 }
 
+.helper-text.success {
+  color: #2e7d32;
+}
+
 .page-title {
   display: flex;
   justify-content: space-between;

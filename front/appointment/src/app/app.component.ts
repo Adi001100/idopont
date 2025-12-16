@@ -2,13 +2,26 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NavbarComponent } from "./component/navbar/navbar.component";
+import { PopupComponent } from "./component/popup/popup.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterModule, NavbarComponent],
+  imports: [RouterModule, NavbarComponent, PopupComponent],
   templateUrl: 'app.component.html',
 })
 export class AppComponent {
   title = 'appointment';
+  errorMessage = '';
+  successMessage = '';
+
+ showSuccess(msg: string) {
+  this.successMessage = msg;
+  setTimeout(() => this.successMessage = '', 3000);
+}
+
+showError(msg: string) {
+  this.errorMessage = msg;
+  setTimeout(() => this.errorMessage = '', 3000);
+}
 }

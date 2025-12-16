@@ -1,6 +1,9 @@
 <section class="auth-shell">
   <div class="card auth-card">
     <div>
+      <div *ngIf="successMessage" class="helper-text success">
+        {{ successMessage }}
+      </div>
       <div class="tag">Visszatérés</div>
       <h2>Bejelentkezés</h2>
       <p class="subtle-text">Lépj be a pasztell kezelőfelületre és kezdd a napod a naptárad átnézésével.</p>

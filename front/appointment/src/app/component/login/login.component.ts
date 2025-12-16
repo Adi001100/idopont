@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../auth/auth.service';
+import { PopupService } from '../../services/popup.service';
 
 @Component({
   standalone: true,
@@ -15,12 +16,13 @@ import { AuthService } from '../../auth/auth.service';
 export class LoginComponent {
   form: FormGroup;
   errorMessage = '';
+  successMessage = '';
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private popupService: PopupService
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -28,22 +30,26 @@ export class LoginComponent {
     });
   }
 
+  ngOnInit() {
+    const msg = history.state?.successMessage;
+    if (msg) this.successMessage = msg;
+  }
+
+
   onSubmit() {
     if (this.form.invalid) return;
 
-    this.http
-      .post<{}>('http://localhost:8080/api/auth/login', this.form.value)
-      .subscribe({
-        next: (res) => {
-          this.router.navigate(['/']);
-        },
-        error: (err) => {
-          if (Array.isArray(err.error) && err.error.length > 0) {
-            this.errorMessage = err.error[0].message;
-          } else {
-            this.errorMessage = 'Ismeretlen hiba történt.';
-          }
+    this.authService.login(this.form.value).subscribe({
+      next: () => {
+        this.router.navigate(['/me']);
+      },
+      error: (err) => {
+        if (Array.isArray(err.error) && err.error.length > 0) {
+          this.popupService.error(err.error[0].message);
+        } else {
+          this.popupService.error('Hiba történt a bejelentkezés során.');
         }
-      });
+      }
+    });
   }
 }
