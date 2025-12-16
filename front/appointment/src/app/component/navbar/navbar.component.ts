@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 import { HttpClientModule } from '@angular/common/http';
+import { PopupService } from '../../services/popup.service';
 
 @Component({
   selector: 'app-navbar',
@@ -18,18 +19,25 @@ export class NavbarComponent {
 
   constructor(
     public auth: AuthService,
+    private popupService: PopupService
   ) { this.isLoggedIn$ = this.auth.isLoggedIn$; }
+
+  confirmLogout() {
+    this.popupService.confirm('Biztosan ki szeretne jelentkezni?', () => {
+      this.logout();
+    });
+  }
 
   logout() {
     this.auth.logout().subscribe({
       next: () => {
-        this.errorMessage = '';
+        this.popupService.success('Sikeresen kijelentkezett.');
       },
       error: (err) => {
         if (Array.isArray(err.error) && err.error.length > 0) {
-          this.errorMessage = err.error[0].message;
+          this.popupService.error(err.error[0].message);
         } else {
-          this.errorMessage = 'Ismeretlen hiba történt.';
+          this.popupService.error('Hiba történt a kijelentkezés során.');
         }
       }
     });

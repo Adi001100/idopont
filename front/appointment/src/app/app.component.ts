@@ -2,11 +2,12 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NavbarComponent } from "./component/navbar/navbar.component";
+import { PopupComponent } from "./component/popup/popup.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterModule, NavbarComponent],
+  imports: [RouterModule, NavbarComponent, PopupComponent],
   templateUrl: 'app.component.html',
 })
 export class AppComponent {

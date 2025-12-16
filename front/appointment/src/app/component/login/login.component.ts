@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../auth/auth.service';
+import { PopupService } from '../../services/popup.service';
 
 @Component({
   standalone: true,
@@ -20,7 +21,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private popupService: PopupService
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -39,13 +41,13 @@ export class LoginComponent {
 
     this.authService.login(this.form.value).subscribe({
       next: () => {
-        this.router.navigate(['/']);
+        this.router.navigate(['/me']);
       },
       error: (err) => {
         if (Array.isArray(err.error) && err.error.length > 0) {
-          this.errorMessage = err.error[0].message;
+          this.popupService.error(err.error[0].message);
         } else {
-          this.errorMessage = 'Ismeretlen hiba történt.';
+          this.popupService.error('Hiba történt a bejelentkezés során.');
         }
       }
     });

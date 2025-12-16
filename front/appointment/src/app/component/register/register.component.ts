@@ -3,6 +3,7 @@ import { FormBuilder, Validators, ReactiveFormsModule, FormGroup } from '@angula
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { PopupService } from '../../services/popup.service';
 
 @Component({
   selector: 'app-register',
@@ -19,7 +20,8 @@ export class RegisterComponent {
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private popupService: PopupService
   ) {
     this.form = this.fb.group({
       fullName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]],
@@ -47,21 +49,19 @@ export class RegisterComponent {
 
     this.http.post('http://localhost:8080/api/auth/register', this.form.value).subscribe({
       next: () => {
-        this.router.navigate(['/login'], {
-          state: {
-            successMessage:
-              'Sikeres regisztráció! Erősítse meg az e-mail címét az e-mailben kiküldött link segítségével.'
-          }
-        });
+         this.router.navigate(['/login']);
+        this.popupService.success(
+          'Sikeres regisztráció! Erősítse meg az e-mail címét az e-mailben kiküldött link segítségével.'
+        );
       },
       error: (err) => {
         this.successMessage = '';
         const e = err?.error;
         if (Array.isArray(e) && e.length) {
-          this.errorMessage = e.map(x => x?.message).filter(Boolean).join('\n');
+          this.popupService.error(e.map(x => x?.message).filter(Boolean).join('\n'));
           return;
         }
-        this.errorMessage = e?.message || 'Sikertelen regisztráció!';
+        this.popupService.error(e?.message || 'Sikertelen regisztráció!');
       },
     });
   }

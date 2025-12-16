@@ -4,6 +4,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ProductCreateComponent } from '../product-create/product-create.component';
 import { ProductListComponent } from '../product-list/product-list.component';
 import { Product } from '../../models/product.model';
+import { ProductService } from '../../services/product.service';
+import { PopupService } from '../../services/popup.service';
 
 @Component({
   selector: 'app-product',
@@ -16,23 +18,22 @@ export class ProductComponent {
   services: Product[] = [];
   errorMessage = '';
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private popupService: PopupService,
+    private productService: ProductService) {
     this.loadServices();
   }
 
   loadServices() {
     const token = typeof localStorage !== 'undefined' ? localStorage.getItem('token') : '';
 
-    this.http
-      .get<Product[]>('http://localhost:8080/api/product/getAll', {
-        headers: token ? { Authorization: `Bearer ${token}` } : {}
-      })
+    this.productService.getAll()
       .subscribe({
         next: (data) => {
           this.services = data.sort((a, b) => b.id - a.id);
         },
         error: () => {
-          this.errorMessage = 'Hiba történt a szolgáltatások betöltésekor.';
+          this.popupService.error('Hiba történt a szolgáltatások betöltése során.');
         }
       });
   }

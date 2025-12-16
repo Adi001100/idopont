@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Product } from '../../models/product.model';
 import { HttpClient } from '@angular/common/http';
 import { ProductComponent } from '../product/product.component';
+import { PopupService } from '../../services/popup.service';
+import { ProductService } from '../../services/product.service';
 
 @Component({
   selector: 'app-product-list',
@@ -17,41 +19,42 @@ export class ProductListComponent {
   @Input() errorMessage = '';
 
   constructor(
-    private http: HttpClient,
-    private productComponent: ProductComponent
+    private productComponent: ProductComponent,
+    private productService: ProductService,
+    private popupService: PopupService
   ) { }
 
   editService(serviceId: number) {
-    this.http
-      .delete(`http://localhost:8080/api/product/edit/${serviceId}`, {
-        withCredentials: true
-      })
+    this.productService.update(serviceId, null as any) // Pass the updated service data here
       .subscribe({
         next: () => {
-          this.errorMessage = 'Szolgáltatás sikeresen módosítva.';
+          this.popupService.success('Szolgáltatás sikeresen módosítva.');
         },
         error: () => {
-          this.errorMessage = 'Hiba történt a módosítás során.';
+          this.popupService.error('Hiba történt a módosítás során.');
         }
       });
   }
 
+  confirmDeleteService(serviceId: number) {
+    this.popupService.confirm(
+      'Biztosan törölni szeretné ezt a szolgáltatást?',
+      () => this.deleteService(serviceId),
+      'Törlés megerősítése',
+      'Törlés',
+      'Mégse'
+    );
+  }
 
   deleteService(serviceId: number) {
-    this.http
-      .delete(`http://localhost:8080/api/product/delete/${serviceId}`, {
-        withCredentials: true
-      })
+    this.productService.delete(serviceId)
       .subscribe({
         next: () => {
-          // this.services = this.services.filter(s => s.id !== serviceId);
-          this.productComponent.loadServices();
-          if (this.services.length > 1) {
-            this.errorMessage = 'Szolgáltatás sikeresen törölve.';
-          }
+          this.productComponent.onServiceCreated();
+          this.popupService.success('Szolgáltatás sikeresen törölve.');
         },
         error: () => {
-          this.errorMessage = 'Hiba történt a törlés során.';
+          this.popupService.error('Hiba történt a törlés során.');
         }
       });
   }

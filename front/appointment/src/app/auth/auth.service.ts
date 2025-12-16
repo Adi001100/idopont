@@ -14,6 +14,7 @@ export class AuthService {
   readonly isLoggedIn$ = this.loggedInSubject.asObservable();
 
   constructor(private router: Router, private http: HttpClient) {
+    this.check().subscribe();
   }
 
   isLoggedIn(): boolean {
@@ -31,6 +32,19 @@ export class AuthService {
             clearTimeout(this.logoutTimer);
           }
           this.loggedInSubject.next(true);
+        })
+      );
+  }
+
+  check(): Observable<boolean> {
+    return this.http
+      .get<void>('http://localhost:8080/api/auth/check', { withCredentials: true }) // vagy /api/user/me
+      .pipe(
+        map(() => true),
+        tap(ok => this.loggedInSubject.next(ok)),
+        catchError(() => {
+          this.loggedInSubject.next(false);
+          return of(false);
         })
       );
   }
