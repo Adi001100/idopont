@@ -79,4 +79,26 @@ export class AuthService {
       map(user => !!user && roles.includes(user.role))
     );
   }
+
+  changePassword(changePasswordDTO: { oldPassword: string; newPassword: string, confirmNewPassword: string }): Observable<void> {
+    return this.http.post<void>(
+      'http://localhost:8080/api/auth/changePassword',
+      changePasswordDTO,
+      { withCredentials: true }
+    );
+  }
+
+  forgotPassword(forgotPasswordDTO: { email: string }): Observable<void> {
+    return this.http.post<void>(
+      'http://localhost:8080/api/auth/forgotPassword',
+      forgotPasswordDTO
+    );
+  }
+  
+  resetPassword(resetPasswordDTO: { token: string; newPassword: string, confirmNewPassword: string }): Observable<void> {
+    return this.http.post<void>(
+      'http://localhost:8080/api/auth/resetPassword',
+      resetPasswordDTO
+    );
+  }
 }

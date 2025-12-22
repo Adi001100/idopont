@@ -19,7 +19,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.adamm.appointment.config.JwtService;
 import com.adamm.appointment.service.UserService;
 
 import jakarta.servlet.http.HttpServletResponse;

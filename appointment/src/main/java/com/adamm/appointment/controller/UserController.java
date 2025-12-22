@@ -1,11 +1,12 @@
 package com.adamm.appointment.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.adamm.appointment.domain.User;
 import com.adamm.appointment.dto.AuthenticatedUserInfoDTO;
+import com.adamm.appointment.dto.ChangePasswordDTO;
 import com.adamm.appointment.dto.UserAdminInfoDTO;
 import com.adamm.appointment.dto.UserRoleUpdateDTO;
 import com.adamm.appointment.service.UserService;

@@ -4,19 +4,25 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.adamm.appointment.dto.AuthTokens;
+import com.adamm.appointment.dto.ChangePasswordDTO;
+import com.adamm.appointment.dto.ForgotPasswordDTO;
+import com.adamm.appointment.dto.ResetPasswordDTO;
 import com.adamm.appointment.dto.UserCreateDTO;
 import com.adamm.appointment.dto.UserInfoDTO;
 import com.adamm.appointment.dto.UserLoginDTO;
 import com.adamm.appointment.config.JwtService;
+import com.adamm.appointment.domain.User;
 import com.adamm.appointment.service.AuthService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -68,6 +74,31 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("changePassword")
+    public ResponseEntity<String> changePassword(@AuthenticationPrincipal User currentUser, @RequestBody ChangePasswordDTO changePasswordDTO) {
+        if (currentUser == null) {
+            log.warn("Unauthorized attempt to change password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User must be authenticated to change password");
+        }
+        log.info("PUT request at /api/auth/changePassword for user: " + currentUser.getEmail());
+        authService.changePassword(currentUser, changePasswordDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/forgotPassword")
+    public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordDTO forgotPasswordDTO) {
+        log.info("POST request at /api/auth/forgotPassword with email: " + forgotPasswordDTO.email());
+        authService.forgotPassword(forgotPasswordDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/resetPassword")
+    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO) {
+        log.info("POST request at /api/auth/resetPassword with token: " + resetPasswordDTO.token());
+        authService.resetPassword(resetPasswordDTO);
+        return ResponseEntity.ok().build();
+    }
+   
     private MultiValueMap<String, String> buildAuthCookies(AuthTokens tokens) {
         HttpHeaders headers = new HttpHeaders();
         ResponseCookie accessCookie = jwtService.buildAccessTokenCookie(tokens.accessToken());

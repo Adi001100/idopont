@@ -2,13 +2,14 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { PopupService } from '../../services/popup.service';
+import { ErrorPipe } from "../../services/validator/error.pipe";
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, RouterModule, ErrorPipe],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })
@@ -31,17 +32,6 @@ export class RegisterComponent {
       address: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(200)]],
       billingAddress: [''],
     });
-  }
-
-  getClientError(field: string): string | null {
-    const c = this.form.get(field);
-    if (!c || !(c.touched || c.dirty) || !c.errors) return null;
-
-    if (c.errors['required']) return 'Kötelező mező.';
-    if (c.errors['email']) return 'Érvénytelen e-mail cím.';
-    if (c.errors['minlength']) return `Minimum ${c.errors['minlength'].requiredLength} karakter.`;
-    if (c.errors['pattern']) return 'Hibás telefonszám formátum.';
-    return null;
   }
 
   onSubmit() {

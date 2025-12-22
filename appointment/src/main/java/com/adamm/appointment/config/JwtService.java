@@ -30,6 +30,9 @@ public class JwtService {
     @Value("${application.security.jwt.refresh-expiration-days:7}")
     private long refreshExpirationDays;
 
+    @Value("${application.security.jwt.reset-password-expiration-minutes:15}")
+    private long resetPasswordExpirationMinutes;
+
     public ResponseCookie buildAccessTokenCookie(String token) {
         return ResponseCookie.from("access_token", token)
                 .httpOnly(true)
@@ -70,6 +73,10 @@ public class JwtService {
                 .build();
     }
 
+    public String generatePasswordResetToken(String email) {
+        return buildPasswordResetToken(email, Instant.now().plusSeconds(resetPasswordExpirationMinutes * 60));
+    }
+
     public String generateAccessToken(User user) {
         return buildToken(user, Instant.now().plusSeconds(accessExpirationMinutes * 60));
     }
@@ -91,6 +98,15 @@ public class JwtService {
         return Jwts.builder()
                 .setClaims(Map.of())
                 .setSubject(user.getUsername())
+                .setIssuedAt(new Date())
+                .setExpiration(Date.from(expiration))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    private String buildPasswordResetToken(String email, Instant expiration) {
+        return Jwts.builder()
+                .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(Date.from(expiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)

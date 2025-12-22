@@ -67,7 +67,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<List<ValidationError>> handleEmailNotFound(UserNotFoundByEmailException exception) {
         log.error("User not found by email: ", exception);
 
-        ValidationError validationError = new ValidationError("email", "User not found by email: " + exception.getEmail());
+        ValidationError validationError = new ValidationError("email", "Ezzel az e-mail címmel nem található felhasználó: " + exception.getEmail());
         return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
     }
 

@@ -18,5 +18,32 @@
       <h4>Számlázási adatok</h4>
       <p class="subtle-text">Cím: {{ user.billingAddress }}</p>
     </div>
+    <div>
+      <h4>Jelszó változtatás</h4>
+      <form (ngSubmit)="onSubmit()" [formGroup]="passwordForm">
+        <div class="form-group">
+          <label for="oldPassword">Régi jelszó</label>
+          <input type="password" id="oldPassword" formControlName="oldPassword" required />
+          <div class="helper-text" *ngIf="getClientError('oldPassword')">
+            {{ getClientError('oldPassword') }}
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="newPassword">Új jelszó</label>
+          <input type="password" id="newPassword" formControlName="newPassword" required />
+          <div class="helper-text" *ngIf="getClientError('newPassword')">
+            {{ getClientError('newPassword') }}
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="confirmNewPassword">Új jelszó megerősítése</label>
+          <input type="password" id="confirmNewPassword" formControlName="confirmNewPassword" required />
+          <div class="helper-text" *ngIf="getClientError('confirmNewPassword')">
+            {{ getClientError('confirmNewPassword') }}
+          </div>
+        </div>
+        <button type="submit" class="btn soft" [disabled]="passwordForm.invalid">Jelszó megváltoztatása</button>
+      </form>
+    </div>
   </div>
 </section>

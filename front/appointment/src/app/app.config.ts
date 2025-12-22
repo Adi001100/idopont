@@ -12,6 +12,8 @@ import { AuthInterceptor } from './auth/auth.interceptro';
 import { CatalogComponent } from './component/catalog/catalog.component';
 import { RoleGuard } from './auth/role.guard';
 import { FullAdminComponent } from './component/full-admin/full-admin.component';
+import { ForgotPasswordComponent } from './component/password-handler/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './component/password-handler/reset-password/reset-password.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -22,6 +24,8 @@ export const routes: Routes = [
   { path: 'create', canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN', 'FULL_ADMIN'] }, component: ProductCreateComponent },
   { path: 'full-admin', canActivate: [AuthGuard, RoleGuard], data: { roles: ['FULL_ADMIN'] }, component: FullAdminComponent },
   { path: 'me', canActivate: [AuthGuard], component: MeComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'reset-password', component: ResetPasswordComponent }
 ];
 
 export const appConfig: ApplicationConfig = {

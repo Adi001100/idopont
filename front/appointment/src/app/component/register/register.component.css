@@ -15,3 +15,9 @@
   display: flex;
   justify-content: flex-end;
 }
+
+a {
+  color: #0f1b2d;
+  font-weight: 600;
+}
+

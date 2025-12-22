@@ -13,17 +13,23 @@
       <label>
         Email cím
         <input type="email" formControlName="email" placeholder="pelda@domain.hu" required />
+        <div class="helper-text" *ngIf="form.get('email') | error:'email' as err">
+          {{ err }}
+        </div>
       </label>
       <label>
         Jelszó
         <input type="password" formControlName="password" placeholder="••••••••" required />
+        <div class="helper-text" *ngIf="form.get('password') | error:'password' as err">
+          {{ err }}
+        </div>
       </label>
-
+      <a routerLink="/forgot-password">Elfelejtetted a jelszavad?</a>
       <button type="submit" class="btn soft" [disabled]="form.invalid">Belépés</button>
     </form>
 
     <p *ngIf="errorMessage" class="helper-text">{{ errorMessage }}</p>
 
-    <p class="subtle-text">Nincs még fiókod? <a routerLink="/register">Regisztrálj itt</a>.</p>
+    <p class="subtle-text">Nincs még fiókod? <a routerLink="/register">Regisztrálj itt.</a></p>
   </div>
 </section>

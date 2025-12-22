@@ -1,22 +1,22 @@
 package com.adamm.appointment.service;
 
+import java.util.List;
+
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 import com.adamm.appointment.domain.User;
 import com.adamm.appointment.dto.AuthenticatedUserInfoDTO;
+import com.adamm.appointment.dto.ChangePasswordDTO;
 import com.adamm.appointment.dto.UserAdminInfoDTO;
 import com.adamm.appointment.dto.UserRoleUpdateDTO;
 import com.adamm.appointment.enums.Role;
-import com.adamm.appointment.exception.UserNotFoundByIdException;
 import com.adamm.appointment.exception.UserNotFoundByEmailException;
-
-import org.springframework.security.core.Authentication;
-
+import com.adamm.appointment.exception.UserNotFoundByIdException;
 import com.adamm.appointment.repository.UserRepository;
 
 import lombok.AllArgsConstructor;

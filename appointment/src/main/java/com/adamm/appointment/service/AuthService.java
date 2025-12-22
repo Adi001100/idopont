@@ -7,10 +7,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.adamm.appointment.config.JwtService;
 import com.adamm.appointment.domain.User;
 import com.adamm.appointment.dto.AuthTokens;
+import com.adamm.appointment.dto.ChangePasswordDTO;
+import com.adamm.appointment.dto.ForgotPasswordDTO;
+import com.adamm.appointment.dto.ResetPasswordDTO;
 import com.adamm.appointment.dto.UserCreateDTO;
 import com.adamm.appointment.dto.UserInfoDTO;
 import com.adamm.appointment.dto.UserLoginDTO;
@@ -33,6 +37,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final EmailService emailService;
 
 
     public UserInfoDTO createUser(UserCreateDTO createDTO) {
@@ -83,6 +88,54 @@ public class AuthService {
         String newAccessToken = jwtService.generateAccessToken(user);
         String newRefreshToken = jwtService.generateRefreshToken(user);
         return new AuthTokens(newAccessToken, newRefreshToken);
+    }
+
+     public void changePassword(User currentUser, ChangePasswordDTO changePasswordDTO) {
+        if (currentUser == null) {
+            throw new IllegalArgumentException("User must be authenticated to change password");
+        }
+        if (!passwordEncoder.matches(changePasswordDTO.oldPassword(), currentUser.getPassword())) {
+            throw new IllegalArgumentException("Nem megfelelő a régi jelszó");
+        }
+        if (!changePasswordDTO.newPassword().equals(changePasswordDTO.confirmNewPassword())) {
+            throw new IllegalArgumentException("Az új jelszavak nem egyeznek!");
+        }
+
+        User userToSave = userRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new UserNotFoundByEmailException(currentUser.getEmail()));
+        userToSave.setPassword(passwordEncoder.encode(changePasswordDTO.newPassword()));
+        userRepository.save(userToSave);
+    }   
+
+    public void forgotPassword(ForgotPasswordDTO resetPasswordDTO) {
+        User user = userRepository.findByEmail(resetPasswordDTO.email())
+                .orElseThrow(() -> new UserNotFoundByEmailException(resetPasswordDTO.email()));
+
+        String resetToken = jwtService.generatePasswordResetToken(user.getEmail());
+        String resetLink = "localhost:4200/reset-password?token=" + resetToken;
+
+        emailService.sendResetLink(user.getEmail(), resetLink);
+    }
+
+    public void resetPassword(ResetPasswordDTO resetPasswordDTO) {
+        String token = resetPasswordDTO.token();
+        String newPassword = resetPasswordDTO.newPassword();
+        String confirmNewPassword = resetPasswordDTO.confirmNewPassword();
+
+        if (!newPassword.equals(confirmNewPassword)) {
+            throw new IllegalArgumentException("Az új jelszavak nem egyeznek!");
+        }
+
+        String email = jwtService.extractUsername(token);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundByEmailException(email));
+
+        if (!jwtService.isTokenValid(token, user)) {
+            throw new IllegalArgumentException("Érvénytelen vagy lejárt jelszó visszaállító token");
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
     }
 
     private void checkUserCanLogin(User user) {
